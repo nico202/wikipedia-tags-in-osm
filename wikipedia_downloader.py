@@ -76,14 +76,23 @@ def download_a_new_category(app, themeName, categoryName):
         os.makedirs(os.path.join(app.CATSCANDIR, themeName))
 
     # Download the JSON file with subcategories and articles of the requested category
-    url = "https://tools.wmflabs.org/quick-intersection/index.php?"
-    url += "lang=%s" % app.WIKIPEDIALANG
-    url += "&project=wikipedia"
-    url += "&cats=" + parse.quote_plus(categoryName)
-    url += "&ns=*&depth=-1&max=30000&start=0&format=json&catlist=1&redirects=none&callback="
-
-    print("  url:\n{0}\n  downloading data from Quick Intersection...".format(
-        url))
+    url = "https://tools.wmflabs.org/quick-intersection/index.php"
+    params = {
+        'lang': app.WIKIPEDIALANG,
+        'project': 'wikipedia',
+        'cats': parse.quote_plus(categoryName),
+        'ns': '*',
+        'depth': -1,
+        'max': 30000,
+        'start': 0,
+        'format': 'json',
+        'catlist': 1,
+        'redirects': 'none',
+        'callback': ''
+    }
+    url += parse.urlencode(params)
+    print('  url: %s' % url)
+    print('  downloading data from Quick Intersection...')
     request_obj = request.Request(url, None, {'User-Agent': app.user_agent})
     data = request.urlopen(request_obj)
     filename = os.path.join(app.CATSCANDIR, themeName, "%s.json" % categoryName)

@@ -429,20 +429,26 @@ class ParseOSMData():
         """Query Wikipedia API for titles conversion from foreing to
            preferred language
         """
-        string = parse.quote_plus(titlesString)
-        url = ("https://{0}.wikipedia.org/w/api.php?action=query"
-               "&prop=langlinks&lllang=it&format=xml&lllimit=55&titles={1}"
-               "&maxlag=5".format(lang, string))
-        #answer = input("\n  Download from Wikipedia 50 titles translations from %s?\n  titles:\n%s\n  url:\n%s\n  [y|n]" % (lang, titlesString, url))
-        answer = "y"
-        request_obj = request.Request(url, None,
-                                      {'User-Agent': self.app.user_agent})
+
+        url = "https://{0}.wikipedia.org/w/api.php?".format(lang)
+        params = {
+            'action': 'query',
+            'prop':   'langlinks',
+            'lllang': 'it',
+            'format': 'xml',
+            'lllimit': 55,
+            'titles': titlesString,
+            'maxlag': 5
+        }
+        url += parse.urlencode(params)
+        request_obj = request.Request(url, None, {'User-Agent': self.app.user_agent})
+        answer = 'y'
         if answer == "y":
             try:
                 #print("\n", url)
                 wikipediaAnswer = request.urlopen(request_obj)
             except:
-                print("\n Wrong url because lang was wrong:", string)
+                print("\n Wrong url because lang was wrong:", titleString)
                 titles = [t.replace(" ", "_") for t in titlesString.split("|")]
                 self.add_to_nonexistent(lang, titles)
                 # print("\n- nonexistent titles returned from Wikipedia:")
