@@ -38,7 +38,7 @@ import sys
 import json
 import webbrowser
 from babel.support import Translations
-from shutil import copyfile, copytree
+from shutil import copyfile, copytree, which
 
 #local imports
 from osm_parser import ParseOSMData
@@ -141,10 +141,14 @@ class App:
         #Download/update OSM data
         if self.args.download_osm or self.args.update_osm:
             if self.args.download_osm:
+                # List required because map is lazy
+                list(map(self.require_program, ('wget', 'osmconvert')))
                 OSM.download_osm_data(self)
             if self.args.update_osm:
+                self.require_program('osmupdate')
                 status = OSM.update_osm_data(self)
         if self.args.download_osm or (self.args.update_osm and status):
+            list(map(self.require_program, ('osmfilter', 'osmconvert')))
             OSM.filter_wikipedia_data_in_osm_file(self)
         if self.args.update_osm and not status:
             print("OSM data where already uptodate or osmupdate has been interrupted.\
@@ -520,6 +524,16 @@ the tag here and it will not be detected as error anymore.")
         if not os.path.exists(path):
             os.makedirs(path)
 
+    def require_program(self, program: str, required : bool = True) -> bool:
+        """Check if a program exists.  If `required` is True, exit if the program is not
+        found.
+        """
+        found = which(program) is not None
+        if required and not found:
+            print("%s not found, you must install to continue" % program)
+            exit(1)
+        return found
+
 ### Not mappable items and false positive tags #########################
     def read_non_mappable_items(self):
         """Read lists of categories and articles that must be ignored,
@@ -622,6 +636,8 @@ the tag here and it will not be detected as error anymore.")
     def count_wkp_tags_in_file(self, country):
         """Count the number of 'wikipedia=*' in OSM file
         """
+        self.require_program('osmfilter')
+
         print("\n number of wikipedia tags")
         if country == "italy":
             path = self.OSMDIR
@@ -646,6 +662,9 @@ the tag here and it will not be detected as error anymore.")
                  "total": len(self.tagsInOSM)}
         #Print tags numbers of other countries
         if download_other_countries:
+            # map is lazy, list is required
+            list(map(self.require_program, ('wget', 'osmconvert')))
+
             print("\n- Tags numbers in countries (with duplicate articles")
             tagsNum = {"italy": self.tagsInOSM, "spain": "", "france": "", "germany": ""}
             for country in tagsNum:
