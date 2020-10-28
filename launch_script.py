@@ -441,7 +441,7 @@ The number of tagged articles will replace that of the lust run in the tags' num
         catsDatesConfigparser.optionxform = str
         if not os.path.isfile(catsDatesFile):
             catsDatesConfigparser.add_section('catscan dates')
-            with open(catsDatesFile, 'wb') as configfile:
+            with open(catsDatesFile, 'w') as configfile:
                 catsDatesConfigparser.write(configfile)
         else:
             catsDatesConfigparser.read(catsDatesFile)
