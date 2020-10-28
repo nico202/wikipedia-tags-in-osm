@@ -561,7 +561,7 @@ the tag here and it will not be detected as error anymore.")
         """Read from file "./data/workaround/tagged.csv" articles flagged as tagged
            by hand, in case the parser did not detected them.
         """
-        ifile = open(os.path.join("data", "workaround", "tagged.csv"), "rb")
+        ifile = open(os.path.join("data", "workaround", "tagged.csv"), "r")
         reader = csv.reader(ifile, delimiter='\t')
         for row in reader:
             if row != [] and row[0][0] != "#":
