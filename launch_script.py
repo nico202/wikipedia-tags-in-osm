@@ -392,6 +392,9 @@ The number of tagged articles will replace that of the lust run in the tags' num
                                                      "category translation")
         self.country = configparser.get("general", "country")
         self.OSMDIR = configparser.get("general", "osmdir")
+        # create if does not exists
+        if not os.path.exists(self.OSMDIR):
+            os.makedirs(self.OSMDIR)
         self.COUNTRYBBOX = configparser.get("general", "osmbbox")
         self.countryPoly = os.path.join("data", "OSM", "%s.poly" % self.country)
         if not os.path.isfile(self.countryPoly):
