@@ -297,7 +297,7 @@ class Creator():
 
         #categories (subpages)
         helpers = Helpers(app)
-        print " - render categories subpages"
+        print(" - render categories subpages")
         for theme in app.themes:
             for category in theme.categories:
                 #articles
@@ -322,7 +322,7 @@ class Creator():
 
         #regions (subpages)
         if self.app.regions != []:
-            print " - render regions subpages"
+            print(" - render regions subpages")
             for region in app.regions:
                 for subcategory in region.subcategories:
                     subcategory.categoryTable = CategoryTable(app,
@@ -344,7 +344,7 @@ class Creator():
                 region.html = region.html.replace('{root}', '../../')
 
         #Create errors page
-        print " - render errors page"
+        print(" - render errors page")
         errorsTemplate = self.env.get_template('errors.html')
 
         self.errorsHtml = errorsTemplate.render(app=self.app,
@@ -355,7 +355,7 @@ class Creator():
         self.errorsHtml = self.errorsHtml.replace('{{root}}', '../')
 
         #Create non_mappable page
-        print " - render non_mappable page"
+        print(" - render non_mappable page")
         nonMappableTemplate = self.env.get_template('non_mappable.html')
 
         self.nonMappableHtml = nonMappableTemplate.render(app=self.app,
@@ -371,7 +371,7 @@ class Creator():
         """Add to self.homepages the homepage file and
            its code rendered from a jinja2 template.
         """
-        print " - render %s (%s)" % (htmlFile, description)
+        print(" - render %s (%s)" % (htmlFile, description))
         indexTemplate = self.env.get_template(htmlFile)
         code = indexTemplate.render(app=self.app,
                                     root = '../',
@@ -464,8 +464,8 @@ class Creator():
             os.makedirs(outDir)
         except OSError as e:
             # skip directory creation
-            # print 'Skipping directory {0} creation: {1}'.format(
-            #     outDir, str(e.strerror))
+            # print('Skipping directory {0} creation: {1}'.format(
+            #     outDir, str(e.strerror)))
             pass
 
         fileOut = open(os.path.join(outDir, fileName), "w")
@@ -635,7 +635,7 @@ class CategoryTable(Helpers):
 class Redirect():
     """Class to create the index.html to redirect to the preferred language"""
     def __init__(self, app, locale_langcode):
-        print " - render redirect page to %s" % locale_langcode
+        print(" - render redirect page to %s" % locale_langcode)
         htmlFile = "redirect.html"
         self.app = app
         self.locale_langcode = locale_langcode

@@ -30,8 +30,8 @@ class Users:
         """Find which users added Wikipedia tags since the previous
            run and count the tags
         """
-        print ("\n- Find which users added Wikipedia tags since the "
-               "previous run and count the tags")
+        print("\n- Find which users added Wikipedia tags since the "
+              "previous run and count the tags")
         todayTagsPerUser = {}
         tags = list(set(app.tagsInOSM))
         #Read old tags lists
@@ -62,10 +62,10 @@ class Users:
         self.users = todayTagsPerUser
 
     def print_users_warning(self):
-        print "  To show the mappers list, it is necessary to have \
+        print("  To show the mappers list, it is necessary to have \
 the tags lists of at least two days. Untill then, \
 the mappers list will not be shown on the web pages. The tags have been saved \
-to `data/OSM/tags.csv`."
+to `data/OSM/tags.csv`.")
 
     def read_old_tags_per_user(self, today):
         """Read the total number of tags added by each user
@@ -125,14 +125,14 @@ to `data/OSM/tags.csv`."
         """Print the new tags against those of the previous day,
            the names of mappers and the number of tags added by each one
         """
-        print "\n  New tags || Mappers"
+        print("\n  New tags || Mappers")
         for tag, usersList in newTags.iteritems():
-            print tag.encode("utf-8"), "||", [u.encode("utf-8") for u in usersList]
-        print len(newTags)
-        print "\n  Mappers || Tags numbers"
+            print(tag.encode("utf-8"), "||", [u.encode("utf-8") for u in usersList])
+        print(len(newTags))
+        print("\n  Mappers || Tags numbers")
         for user, tagsNum in users.iteritems():
-            print user.encode("utf-8"), "||", tagsNum
-        print len(users)
+            print(user.encode("utf-8"), "||", tagsNum)
+        print(len(users))
 
     def save_tags_per_user(self, app, todayTagsPerUser):
         """Save to CSV file the total number of tags added by each user

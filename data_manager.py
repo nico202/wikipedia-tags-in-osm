@@ -129,7 +129,7 @@ class Category:
                                  urllib.quote_plus(self.name.encode("utf-8")))
 
         #Extract categories info from Quick Intersection data
-        #print "\n- reading Quick Intersection data"
+        #print("\n- reading Quick Intersection data")
         if categoriesData is None:
             categoriesData = self.read_categories_data(catscanFile, self.name)
 
@@ -171,11 +171,11 @@ class Category:
         #Build subcategories
         for subIdx, subcatName in enumerate(sorted(categoriesData[categoryName]["subcategories"])):
             if subcatName in parents_categories_names:
-                print ("\nWARNING: Infinite loop."
-                       "\n\"{0}\" is a sub-category of \"{1}\" but it is also "
-                       "a parent category, thus it will be discarded.".format(
-                           subcatName.encode("utf-8"),
-                           self.name.encode("utf-8")))
+                print("\nWARNING: Infinite loop."
+                      "\n\"{0}\" is a sub-category of \"{1}\" but it is also "
+                      "a parent category, thus it will be discarded.".format(
+                          subcatName.encode("utf-8"),
+                          self.name.encode("utf-8")))
                 continue
             subIdx = "%s_%s" % (self.ident, subIdx)
             subcategory = Category(app, subIdx, catscanFile, subcatName,
@@ -207,7 +207,7 @@ class Category:
     def read_categories_data(self, catscanFile, category):
         """Extract categories data from Quick Intersection
         """
-        #print "\n- Read categories, sub-categories and articles relations"
+        #print("\n- Read categories, sub-categories and articles relations")
         #categoriesData = {cat1: {subcat1: None, subcat2: None, "articles": ["article1", ...]},
         categoriesData = {}
 
@@ -267,7 +267,7 @@ class Category:
     def set_mappable(self, parentIsMappable):
         if not parentIsMappable or \
             self.name in self.app.nonMappable["subcategories"]:
-            #print "not mappable category", self.name
+            #print("not mappable category", self.name)
             return False
         else:
             return True
@@ -309,7 +309,7 @@ class Category:
         # articles
         self.progress = {}
         if self.titles != []:
-            #print "articles"
+            #print("articles")
             self.progress["articles"] = {"num": None, "string": None}
             self.progress["articles"]["string"], self.progress["articles"]["num"] = self.calculate_tagging_progress(self.titlesInOSM, self.titles)
         # category
@@ -337,7 +337,7 @@ class Category:
     def set_has_template_in_article(self, article):
         if article.isMappable and article.inOSM and not hasattr(article, "hasTemplate"):
             if article.name not in self.app.templatesStatus:
-                print "* Error: this article is missing from templatesStatus dictionary:", article.name.encode("utf-8")
+                print("* Error: this article is missing from templatesStatus dictionary:", article.name.encode("utf-8"))
             else:
                 if self.app.templatesStatus[article.name] == "True":
                     article.hasTemplate = True
@@ -398,15 +398,15 @@ class Category:
     def print_info(self):
         """Print info about this category (for debugging)
         """
-        print "\nName: %s" % self.name.replace("_", " ").encode("utf-8")
-        print "Mappable subcategories (%d):" % len(self.subcategories)
+        print("\nName: %s" % self.name.replace("_", " ").encode("utf-8"))
+        print("Mappable subcategories (%d):" % len(self.subcategories))
         for subcat in self.subcategories:
-            print "             %s" % subcat.name.replace("_", " ").encode("utf-8")
-        print "Tagged articles: %s (%d)" % (self.progress["allMArticles"]["string"],
-                                            self.progress["allMArticles"]["num"])
-        print "Graph:"
+            print("             %s" % subcat.name.replace("_", " ").encode("utf-8"))
+        print("Tagged articles: %s (%d)" % (self.progress["allMArticles"]["string"],
+                                            self.progress["allMArticles"]["num"]))
+        print("Graph:")
         categoryGraph = self.create_category_graph("", True)
-        print categoryGraph
+        print(categoryGraph)
 
     def create_category_graph(self, tree, last):
         """Print a graphic of category data (for debugging)
@@ -566,7 +566,7 @@ class Article:
         if not parentIsMappable or \
                 (self.name in self.app.nonMappable["articles"] or
                  self.name in self.app.nonMappable["redirects"]):
-            #print "not mappable article", self.name
+            #print("not mappable article", self.name)
             self.isMappable = False
         else:
             self.isMappable = True

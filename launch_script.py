@@ -144,8 +144,8 @@ class App:
         if self.args.download_osm or (self.args.update_osm and status):
             OSM.filter_wikipedia_data_in_osm_file(self)
         if self.args.update_osm and not status:
-            print "OSM data where already uptodate or osmupdate has been interrupted.\
-To repeat the updating process, launch the script again with the `-u` option."
+            print("OSM data where already uptodate or osmupdate has been interrupted.\
+To repeat the updating process, launch the script again with the `-u` option.")
 
         if not self.args.analyze:
             #"There's nothing left for me to tell you"
@@ -157,7 +157,7 @@ To repeat the updating process, launch the script again with the `-u` option."
             #If an article is tagged in a foreign language, ask to Wikpedia
             #what is the corresponding article of the preferred language, so
             #that we can flag it as tagged aswell.
-            print "\n- Read from the OSM file the articles already tagged"
+            print("\n- Read from the OSM file the articles already tagged")
             parseOSMData = ParseOSMData(self)
             #list of Wikipedia tags in OSM
             self.tagsInOSM = parseOSMData.allTags
@@ -173,7 +173,7 @@ To repeat the updating process, launch the script again with the `-u` option."
             self.add_tagged_articles()
 
             if self.args.show_coordinates_from_osm:
-                print "\n--- Add OSM coordinates to the articles"
+                print("\n--- Add OSM coordinates to the articles")
                 parseOSMData.get_centroids()
 
 ### Manage Wikipedia data ##############################################
@@ -213,8 +213,8 @@ To repeat the updating process, launch the script again with the `-u` option."
 ### Merge OSM info into Wikipedia data #################################
         #Add to Wikipedia categories and articles istances info about
         #their status in OSM: (tagged/not tagged), osm ids and counters
-        print ("\n- Check which articles are already tagged in the country's "
-               "OSM file")
+        print("\n- Check which articles are already tagged in the country's "
+              "OSM file")
         for theme in self.themes:
             for category in theme.categories:
                 category.check_articles_in_osm()
@@ -223,7 +223,7 @@ To repeat the updating process, launch the script again with the `-u` option."
         #Ask to Wikipedia which articles have/have not Coord template.
         #Articles with article.hasTemplate == False will be marked on web pages.
         if self.args.show_missing_templates:
-            print "\n- Check which articles miss geo template (Coord) in Wikipedia"
+            print("\n- Check which articles miss geo template (Coord) in Wikipedia")
             self.templatesStatus = wikipedia_downloader.read_old_templates_status(self)
             wikipedia_downloader.update_templates_status(self)
             #Set hasTemplate = False to articles without Coord template
@@ -235,13 +235,13 @@ To repeat the updating process, launch the script again with the `-u` option."
         #position, it is possible to add a link to zoom to that position
         #with JOSM.
         if self.args.show_link_to_wikipedia_coordinates:
-            print "\n- Check the non tagged articles whose position is known by Wikipedia"
+            print("\n- Check the non tagged articles whose position is known by Wikipedia")
             wikipedia_downloader.add_wikipedia_coordinates(self)
             #Save GeoJSON file with titles and coordinates known by Wikipedia
             self.save_titles_with_coords_geojson()
 
         if self.args.infer_coordinates_from_wikipedia:
-            print "\n- Use Nuts4Nuts to infer coordinates of non tagged articles, whose position is unknown by Wikipedia"
+            print("\n- Use Nuts4Nuts to infer coordinates of non tagged articles, whose position is unknown by Wikipedia")
             nuts4nuts_infer.infer_coordinates_with_nuts4nuts(self)
 
         #For debugging
@@ -267,8 +267,8 @@ To repeat the updating process, launch the script again with the `-u` option."
                 #Overwrite the previous statistics
                 del self.dates[-2]
                 del self.days[-2]
-                print "\n This is the second time that data ara analyzed today. \
-The number of tagged articles will replace that of the lust run in the tags' numbers table."
+                print("\n This is the second time that data ara analyzed today. \
+The number of tagged articles will replace that of the lust run in the tags' numbers table.")
 
         #Count tags added by each user
         self.users = Users(self).users
@@ -296,8 +296,8 @@ The number of tagged articles will replace that of the lust run in the tags' num
                                         frozenset(self.SUPPORTED_LOCALES)
 
             for locale_langcode in non_supported_locales:
-                print 'Warning: dropping unsupported locale: {0}'.format(
-                       locale_langcode)
+                print('Warning: dropping unsupported locale: {0}'.format(
+                       locale_langcode))
 
             # if no supported locale is chosen fallback to en_US
             if not self.locales:
@@ -308,7 +308,7 @@ The number of tagged articles will replace that of the lust run in the tags' num
                                                       [locale_langcode]
                                                       )
                 self._ = self.translations.ugettext
-                print "\n- Create web pages with locale: ", locale_langcode
+                print("\n- Create web pages with locale: ", locale_langcode)
                 Creator(self, locale_langcode)
 
                 if self.args.browser:
@@ -327,22 +327,22 @@ The number of tagged articles will replace that of the lust run in the tags' num
             #Save stats
             if self.args.save_stats:
                 self.save_stats_to_csv()
-                print "\nNew stats have been saved."
+                print("\nNew stats have been saved.")
             else:
-                print "\nNo stats saved."
+                print("\nNo stats saved.")
 
         #Copy files from html dir to outdir (for example a Dropbox directory)
         if self.args.copy:
             self.copy_html_files_to_outdir()
 
-        print "\nDone."
+        print("\nDone.")
 
     def save_titles_with_coords_geojson(self):
         """Save a GeoJSON file with the coordinates known by Wikipedia.
            It is used by the "Map" tab in homepage
         """
-        print ("\n- Save a GeoJSON file with the coordinates from "
-               "Wikipedia (map markers)")
+        print("\n- Save a GeoJSON file with the coordinates from "
+              "Wikipedia (map markers)")
         tree = {"type": "FeatureCollection", "features": []}
         i = 0
         for title, coords in self.titlesWithCoordsFromWikipedia.iteritems():
@@ -358,7 +358,7 @@ The number of tagged articles will replace that of the lust run in the tags' num
                                        }
                           }
                 tree["features"].append(feature)
-        print "  markers: %d" % len(tree["features"])
+        print("  markers: %d" % len(tree["features"]))
         coordsFile = open(os.path.join("html", "GeoJSON", "coords.js"), "w")
         data = json.dumps(tree)
         data = "var coords = %s" % data
@@ -376,7 +376,7 @@ The number of tagged articles will replace that of the lust run in the tags' num
         configFile = "config.cfg"
         if not os.path.isfile(configFile):
             call("cp %s %s" % ("config.template", configFile), shell=True)
-            print "* A new config file has been created:\n  %s\n\n  Fill it with the necessary information (see README.md and config.template)." % configFile
+            print("* A new config file has been created:\n  %s\n\n  Fill it with the necessary information (see README.md and config.template)." % configFile)
             answer = raw_input("\n  Continue? [Y/n]\n")
             if answer not in ("", "Y", "y"):
                 sys.exit()
@@ -392,10 +392,10 @@ The number of tagged articles will replace that of the lust run in the tags' num
         self.COUNTRYBBOX = configparser.get("general", "osmbbox")
         self.countryPoly = os.path.join("data", "OSM", "%s.poly" % self.country)
         if not os.path.isfile(self.countryPoly):
-            print "\n* Poly file is missing: \n  %s" % self.countryPoly
+            print("\n* Poly file is missing: \n  %s" % self.countryPoly)
             sys.exit(1)
         if self.WIKIPEDIALANG == "" or self.country == "" or self.OSMDIR == "":
-            print "\n* Fill in `config.cfg` file the following options: `osmdir`, `preferred language`, `country`"
+            print("\n* Fill in `config.cfg` file the following options: `osmdir`, `preferred language`, `country`")
             sys.exit(1)
         #regions names
         if not configparser.has_option("general", "regions names") or \
@@ -518,7 +518,7 @@ the tag here and it will not be detected as error anymore.")
            Wikipedia articles or categories like: "Paintings in the X museum",
            "Opere nel Castello Sforzesco‎"...
         """
-        print "\n- Read the lists of articles and categories which must be ignored because flagged as non-mappable from the files in `./data/wikipedia/non_mappable`"
+        print("\n- Read the lists of articles and categories which must be ignored because flagged as non-mappable from the files in `./data/wikipedia/non_mappable`")
         articles = []
         subcategories = []
         redirects = []
@@ -567,17 +567,17 @@ the tag here and it will not be detected as error anymore.")
                         catFound = True
                         break
         if not catFound:
-            print "\nNo categories found with the specified name."
+            print("\nNo categories found with the specified name.")
 
     def display_categories_names(self):
         """Print to terminal the list of main categories
         """
-        print "\n=CATEGORIES="
+        print("\n=CATEGORIES=")
         categoryNum = 0
         for theme in self.themes:
-            print "\n%s:" % theme.name
+            print("\n%s:" % theme.name)
             for category in theme.categories:
-                print "%d - %s" % (categoryNum, category.name.replace("_", " "))
+                print("%d - %s" % (categoryNum, category.name.replace("_", " ")))
                 categoryNum += 1
 
 ### Statistics #########################################################
@@ -613,7 +613,7 @@ the tag here and it will not be detected as error anymore.")
     def count_wkp_tags_in_file(self, country):
         """Count the number of 'wikipedia=*' in OSM file
         """
-        print "\n number of wikipedia tags"
+        print("\n number of wikipedia tags")
         if country == "italy":
             path = self.OSMDIR
         else:
@@ -637,28 +637,28 @@ the tag here and it will not be detected as error anymore.")
                  "total": len(self.tagsInOSM)}
         #Print tags numbers of other countries
         if download_other_countries:
-            print "\n- Tags numbers in countries (with duplicate articles"
+            print("\n- Tags numbers in countries (with duplicate articles")
             tagsNum = {"italy": self.tagsInOSM, "spain": "", "france": "", "germany": ""}
             for country in tagsNum:
-                print "\n- %s:" % country
+                print("\n- %s:" % country)
                 if self.country != "italy":
                     #download other countries
-                    print "\n downloading..."
+                    print("\n downloading...")
                     url = "http://download.geofabrik.de/osm/europe/%s.osm.pbf" % country
                     call('wget -c %s -O %s.osm.pbf' % (url, country), shell=True)
-                    print "\n converting to O5M..."
+                    print("\n converting to O5M...")
                     call('osmconvert %s.osm.pbf -o=%s.o5m' % (country, country), shell=True)
                     call('rm %s.osm.pbf' % (country), shell=True)
                     #count tags "wikipedia=*"
                     tagsInCountry = self.count_wkp_tags_in_file(country)
                     tagsNum[country] = tagsInCountry
-                print country, tagsNum[country]
+                print(country, tagsNum[country])
         return todayDate, today
 
     def save_stats_to_csv(self):
         """Save stats to file
         """
-        print "\n- Saving stats to CSV file"
+        print("\n- Saving stats to CSV file")
         statsDir = os.path.join("data", "stats")
         statsFile = os.path.join(statsDir, "stats.csv")
         oldStatsFile = os.path.join(statsDir, "old_stats.csv")
@@ -681,10 +681,11 @@ the tag here and it will not be detected as error anymore.")
     def copy_html_files_to_outdir(self):
         """Copy html files to another directory, for example Dropbox dir
         """
-        print "\n- Copy files from `html` dir to: '%s'" % self.OUTDIR
+        print("\n- Copy files from `html` dir to: '%s'" % self.OUTDIR)
         if self.OUTDIR == "":
-            print "\n  *Write in `config.cfg` --> `outdir` teh path of the directory in which you want to copy the files."
+            print("\n  *Write in `config.cfg` --> `outdir` teh path of the directory in which you want to copy the files.")
         else:
+            # FIXME: can be done in pure python?
             call("cp -R ./html/* %s" % self.OUTDIR, shell=True)
 
 

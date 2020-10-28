@@ -61,19 +61,19 @@ class OSMcentroids(object):
            centroids
         """
 
-        print "Import OSM data of file: "
-        print self.wOSMFile
-        print "into the Spatialite database: "
-        print self.wOSMdb
-        print
+        print("Import OSM data of file: ")
+        print(self.wOSMFile)
+        print("into the Spatialite database: ")
+        print(self.wOSMdb)
+        print()
 
         command = "spatialite_osm_raw -o {wosm_file} -d {wtosm_db}".format(
             wosm_file=self.wOSMFile,
             wtosm_db=self.wOSMdb)
         call(command, shell=True)
 
-        print
-        print "Import completed!"
+        print()
+        print("Import completed!")
 
     def _query_wrapper(self, query):
         con = spatialite.connect(self.wOSMdb)
@@ -85,9 +85,9 @@ class OSMcentroids(object):
             cur.execute(cmd)
             cur.execute(query)
         except spatialite.OperationalError as error:
-            print "Failed execution of query:\n%s" % query
-            print error
-            print "None table created"
+            print("Failed execution of query:\n%s" % query)
+            print(error)
+            print("None table created")
 
         return cur
 
@@ -138,10 +138,10 @@ class OSMcentroids(object):
                 cur = con.cursor()
             cur.execute(query)
             num = cur.fetchone()[0]
-            print "A table with %d rows has been created" % num
+            print("A table with %d rows has been created" % num)
         except spatialite.OperationalError as error:
-            print "Failed execution of query:\n%s" % query
-            print error
+            print("Failed execution of query:\n%s" % query)
+            print(error)
 
     def create_relations_centroids(self):
         con = spatialite.connect(self.wOSMdb)
@@ -208,16 +208,16 @@ class OSMcentroids(object):
                 cur = con.cursor()
             cur.execute(query)
             num = cur.fetchone()[0]
-            print "A table with %d rows has been created" % num
+            print("A table with %d rows has been created" % num)
         except spatialite.OperationalError as error:
-            print "Failed execution of query:\n%s" % query
-            print error
-            print "None table created"
+            print("Failed execution of query:\n%s" % query)
+            print(error)
+            print("None table created")
         finally:
             with con:
                 cur = con.cursor()
             cur.execute("DROP TABLE osm_relations_centroids_source")
-            print "Drop TEMP table osm_relations_centroids_source"
+            print("Drop TEMP table osm_relations_centroids_source")
 
     def _get_coords_from_wkt(self, cur):
         centroids = {}
@@ -285,19 +285,19 @@ class OSMcentroids(object):
                 cur = con.cursor()
             cur.execute(query)
         except spatialite.OperationalError as error:
-            print "Failed execution of query:\n%s" % query
-            print error
+            print("Failed execution of query:\n%s" % query)
+            print(error)
 
     def drop_database(self):
         proc = Popen(["rm", self.wOSMdb], stderr=PIPE)
         status = proc.wait()
 
         if status == 0:
-            print "Rimosso il database {}".format(self.wOSMdb)
+            print("Rimosso il database {}".format(self.wOSMdb))
         else:
             output = proc.stderr.read()
-            print "rm exited with status: {}".format(status)
-            print output
+            print("rm exited with status: {}".format(status))
+            print(output)
 
 
 def main():
@@ -370,7 +370,7 @@ def main():
                             action="store_true")
 
         args = parser.parse_args()
-        #print args
+        #print(args)
 
         osm = OSMcentroids(args.wOSMFile,
                            args.wOSMdb,

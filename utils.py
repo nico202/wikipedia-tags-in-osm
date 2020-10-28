@@ -83,26 +83,26 @@ def deg2dms(dd):
 
 if __name__ == '__main__':
     print
-    print 'Coordinate di Berlino'
-    print 'deg: (52.518611, 13.408056)'
+    print('Coordinate di Berlino')
+    print('deg: (52.518611, 13.408056)')
     dms = coords_deg2dms_cp(52.518611, 13.408056)
     dms_str = dms2str(dms)
-    print 'dms: ', dms_str
-    print 'atteso: 52°31\'07"N 13°24\'29"E'
-    print format_dms(dms)
-    print
-    print 'Coordinate di Washington D.C.'
-    print 'deg: (38.895111, -77.036667)'
+    print('dms: ', dms_str)
+    print('atteso: 52°31\'07"N 13°24\'29"E')
+    print(format_dms(dms))
+    print()
+    print('Coordinate di Washington D.C.')
+    print('deg: (38.895111, -77.036667)')
     dms = coords_deg2dms_cp(38.895111, -77.036667)
     dms_str = dms2str(dms)
-    print 'dms: ', dms_str
-    print 'atteso: 38°53\'42"N 77°02\'12"W'
-    print format_dms(dms)
-    print
-    print 'Coordinate di Santiago del Cile'
-    print 'deg: (-33.437833, -70.650333)'
+    print('dms: ', dms_str)
+    print('atteso: 38°53\'42"N 77°02\'12"W')
+    print(format_dms(dms))
+    print()
+    print('Coordinate di Santiago del Cile')
+    print('deg: (-33.437833, -70.650333)')
     dms = coords_deg2dms_cp(-33.437833, -70.650333)
     dms_str = dms2str(dms)
-    print 'dms: ', dms_str
-    print 'atteso: 33°26\'16"S 70°39\'01"W'
-    print format_dms(dms)
+    print('dms: ', dms_str)
+    print('atteso: 33°26\'16"S 70°39\'01"W')
+    print(format_dms(dms))

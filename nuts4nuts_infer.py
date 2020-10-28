@@ -132,8 +132,8 @@ def call_nuts4nuts(i, articleName, q=None, outfile=None):
         'queries': json.dumps(query)
     })
 
-    print "\n", i
-    print 'requesting {}'.format(articleName)
+    print("\n", i)
+    print('requesting {}'.format(articleName))
 
     req = None
     try:
@@ -142,7 +142,7 @@ def call_nuts4nuts(i, articleName, q=None, outfile=None):
         pass
 
     if req:
-        print 'req.ok: {}'.format(req.ok)
+        print('req.ok: {}'.format(req.ok))
         if not req.ok:
             req.raise_for_status()
 
@@ -159,11 +159,11 @@ def call_nuts4nuts(i, articleName, q=None, outfile=None):
             if city:
                 loc = geolocate_place(city)
 
-        print loc
+        print(loc)
         if loc:
             output = {'article': articleName, 'coords': loc}
             if q:
-                #print output
+                #print(output)
                 q.put(output)
             else:
                 with open(outfile, 'a+') as f:
@@ -221,7 +221,7 @@ def infer_coordinates_with_nuts4nuts(app):
             category.check_articles_coords_from_nuts4nuts()
 
     app.coordsFromNuts4Nuts = list(set(app.coordsFromNuts4Nuts))
-    print "  articles:", len(app.coordsFromNuts4Nuts)
+    print("  articles:", len(app.coordsFromNuts4Nuts))
 
 
 if __name__ == '__main__':
@@ -235,7 +235,7 @@ if __name__ == '__main__':
     articles = frozenset([line.strip() for line in inFile.readlines()])
     inFile.close()
 
-    print ' total articles: %d' % len(articles)
+    print(' total articles: %d' % len(articles))
 
     nutsCoordsFile = os.path.join("data",
                                   "nuts4nuts",
@@ -250,10 +250,10 @@ if __name__ == '__main__':
             data = [ast.literal_eval(line.strip()) for line in f.readlines()]
 
     alreadyScanned = frozenset([d['article'] for d in data])
-    print ' already scanned: %d' % len(alreadyScanned)
+    print(' already scanned: %d' % len(alreadyScanned))
 
     articlesToScan = list(articles - alreadyScanned)
-    print ' to scan: %d' % len(articlesToScan)
+    print(' to scan: %d' % len(articlesToScan))
     print
 
     logger = logging.getLogger()
@@ -271,7 +271,7 @@ if __name__ == '__main__':
         mw.close_multiprocess()
 
     except KeyboardInterrupt:
-        print "\nCaught KeyboardInterrupt, terminating workers"
+        print("\nCaught KeyboardInterrupt, terminating workers")
         del mw
 #        mw.close_multiprocess()
         #mw.terminate_multiprocess()

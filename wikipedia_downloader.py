@@ -39,7 +39,7 @@ def check_catscan_data(app, themesAndCatsNames):
     """Check if we have Wikipedia data from Quick Intersection (subcategories names
        and articles names) of all the categories written in 'config.cfg' file
     """
-    print "\n- Check that we have Wikipedia data (from Quick Intersection) of all the categories in `config.cfg`"
+    print("\n- Check that we have Wikipedia data (from Quick Intersection) of all the categories in `config.cfg`")
     needInfo = {}
     for themeName, categoriesNames in themesAndCatsNames.iteritems():
         for categoryName in categoriesNames:
@@ -66,7 +66,7 @@ def download_a_new_category(app, themeName, categoryName):
        from quick_intersection (http://tools.wmflabs.org/catscan2/quick_intersection.php?)
        and save it to: CATSCANDIR/theme name/category name.json
     """
-    print "\n- Download the list of sub-categories and articles of a new Wikipedia category.\n  %s" % categoryName.encode("utf-8")
+    print("\n- Download the list of sub-categories and articles of a new Wikipedia category.\n  %s" % categoryName.encode("utf-8"))
     #response = raw_input("\n- Scarico dati categoria %s da Quick Intersection?\n[y/N]" % categoryName.encode("utf-8"))
     response = "y"
     if response not in ("y", "Y"):
@@ -82,15 +82,15 @@ def download_a_new_category(app, themeName, categoryName):
     url += "&cats=" + urllib.quote_plus(categoryName.encode("utf-8"))
     url += "&ns=*&depth=-1&max=30000&start=0&format=json&catlist=1&redirects=none&callback="
 
-    print ("  url:\n{0}\n  downloading data from Quick Intersection...".format(
-           url))
+    print("  url:\n{0}\n  downloading data from Quick Intersection...".format(
+        url))
     request = urllib2.Request(url, None, {'User-Agent': app.user_agent})
     data = urllib2.urlopen(request)
     filename = os.path.join(app.CATSCANDIR, themeName, "%s.json" % categoryName)
     csvFile = open(filename, 'w')
     csvFile.write(data.read())
     csvFile.close()
-    print "  file:\n%s" % filename
+    print("  file:\n%s" % filename)
 
     #Remember category date
     categoryDate = time.strftime("%b %d, ore %H", time.localtime())
@@ -121,7 +121,7 @@ def read_old_templates_status(app):
             title = title.decode("utf-8")
             templatesStatus[title] = status
         inFile.close()
-    print "  Without template:", len([i for i in templatesStatus.values() if i == "False"])
+    print("  Without template:", len([i for i in templatesStatus.values() if i == "False"]))
     return templatesStatus
 
 
@@ -138,11 +138,11 @@ def update_templates_status(app):
         titlesString = "|".join(fiftyTitles)
         titlesStrings.append(titlesString)
     #download
-    print "  Update data with %d requests to Wikipedia:" % len(titlesStrings)
+    print("  Update data with %d requests to Wikipedia:" % len(titlesStrings))
     for i, titlesString in enumerate(titlesStrings):
         continueString = ""
         tlcontinueString = ""
-        print "\n  request %d" % i
+        print("\n  request %d" % i)
         while True:
             wikipediaAnswer = download_templates(app, titlesString, continueString, tlcontinueString)
             if not wikipediaAnswer:
@@ -152,7 +152,7 @@ def update_templates_status(app):
             if (continueString, tlcontinueString) == ("", ""):
                 break
             else:
-                print "  continue", continueString, tlcontinueString
+                print("  continue", continueString, tlcontinueString)
     #Save updated templates status to file
     save_updated_templates_status(app)
 
@@ -174,7 +174,7 @@ def download_templates(app, titlesString, continueString, tlcontinueString):
         try:
             wikipediaAnswer = urllib2.urlopen(request)
         except:
-            print "\n* a problem occurred during downloading:", titlesString, continueString, tlcontinueString
+            print("\n* a problem occurred during downloading:", titlesString, continueString, tlcontinueString)
             return False
         else:
             fileName = os.path.join(app.MISSINGTEMPLATESDIR, "answer.json")
@@ -200,7 +200,7 @@ def parse_wikipedia_answer(app):
         else:
             status = str("templates" in pageData)
             app.templatesStatus[title] = status
-        #print "aggiunto ", title.encode("utf-8"), status.encode("utf-8")
+        #print("aggiunto ", title.encode("utf-8"), status.encode("utf-8"))
     if "continue" in data:
         return (data["continue"]["continue"], data["continue"]["tlcontinue"])
     else:
@@ -208,7 +208,7 @@ def parse_wikipedia_answer(app):
 
 
 def save_updated_templates_status(app):
-    print "\n- Save file with geo templates' statuses"
+    print("\n- Save file with geo templates' statuses")
     fileName = app.TEMPLATESSTATUSFILE
     oldFileName = os.path.join(app.MISSINGTEMPLATESDIR, "old_%s" % app.TEMPLATESSTATUSFILE.split("/")[-1])
     call("cp '%s' '%s'" % (fileName, oldFileName), shell=True)
@@ -222,9 +222,9 @@ def save_updated_templates_status(app):
         writer.writerow([title.encode("utf-8"), status])
     fileOut.close()
     #Print results
-    print "  Tagged articles   : %d" % len(app.templatesStatus)
-    print "    with template   : %d" % len([i for i in app.templatesStatus.values() if i == "True"])
-    print "    without template: %d" % len([i for i in app.templatesStatus.values() if i == "False"])
+    print("  Tagged articles   : %d" % len(app.templatesStatus))
+    print("    with template   : %d" % len([i for i in app.templatesStatus.values() if i == "True"]))
+    print("    without template: %d" % len([i for i in app.templatesStatus.values() if i == "False"]))
 
 
 ### Add Wikipedia coordinates to non tagged articles ###################
@@ -259,7 +259,7 @@ def add_wikipedia_coordinates(app):
     for theme in app.themes:
         for category in theme.categories:
             category.check_articles_coords_in_wikipedia()
-    print "  articles:", len(app.titlesWithCoordsFromWikipedia)
+    print("  articles:", len(app.titlesWithCoordsFromWikipedia))
 
     app.mappable_titles_without_coords = \
         list(set(app.mappable_titles_without_coords))

@@ -59,13 +59,13 @@ class ParseOSMData():
         n = 0
         for lang, titles in self.foreignTitles.iteritems():
             n += len(titles)
-        print "  %d tags referring to foreign languages have been found." % n
+        print("  %d tags referring to foreign languages have been found." % n)
 
         #Translate foreign titles to preferred language
         self.nonexistent = {}
         foreignTitlesDisabled = False        #for debugging
         if foreignTitlesDisabled:
-            print "\n  * foreignTitlesDisabled: not using foreign tagged articles"
+            print("\n  * foreignTitlesDisabled: not using foreign tagged articles")
             self.converted = {}
         else:
             #read old translations
@@ -77,7 +77,7 @@ class ParseOSMData():
             for foreignTitle, osmids in foreignTitles.iteritems():
                 if lang in self.converted and foreignTitle in self.converted[lang]:
                     title = self.converted[lang][foreignTitle]
-                    #print "added translated article", foreignTitle, title
+                    #print("added translated article", foreignTitle, title)
                     self.add_title_to_dict(self.titles, title, osmids)
                 elif lang in self.nonexistent and foreignTitle in self.nonexistent[lang]:
                     #wrong tag
@@ -115,49 +115,49 @@ class ParseOSMData():
                                  self.app.libspatialitePath)
 
         if os.path.isfile(self.app.wOSMdb) and not (self.app.args.download_osm or self.app.args.update_osm):
-            print "\n* The SQLite database containing OSM object with Wikipedia tag already exists."
-            print "\n  I'll use this database: %s" % self.app.wOSMdb
+            print("\n* The SQLite database containing OSM object with Wikipedia tag already exists.")
+            print("\n  I'll use this database: %s" % self.app.wOSMdb)
         else:
             try:
                 centroids.drop_database()
-                print "Drop old database"
+                print("Drop old database")
             except:
                 pass
 
-            print "\n* The SQLite database containing Wikipedia tagged OSM data is missing or must be updated"
-            print " (this happens when the script is launched with `-d` or `-u` options)"
-            print "\n  Importing data"
+            print("\n* The SQLite database containing Wikipedia tagged OSM data is missing or must be updated")
+            print(" (this happens when the script is launched with `-d` or `-u` options)")
+            print("\n  Importing data")
             centroids.import_data_in_sqlite_db()
-            print "\n  Data import completed"
+            print("\n  Data import completed")
 
-        print "-- Trying to read centroids of ways from database"
+        print("-- Trying to read centroids of ways from database")
         waysCentroids = centroids.get_ways_centroids()
 
         if not waysCentroids:
-            print "--- I didn't find ways centroids in the database"
-            print "--- I'll calculate them"
+            print("--- I didn't find ways centroids in the database")
+            print("--- I'll calculate them")
             centroids.create_ways_centroids()
-            print "-- Trying to read centroids of ways from database"
+            print("-- Trying to read centroids of ways from database")
             waysCentroids = centroids.get_ways_centroids()
 
 
         if waysCentroids:
-            print "-- Saving centroids of ways into tags data"
+            print("-- Saving centroids of ways into tags data")
             self.save_centroids(waysCentroids, "w")
 
             waysDimensions = centroids.get_ways_dimensions()
             self.save_dimensions(waysDimensions, "w")
 
-        print "-- Trying to read centroids of relations from database"
+        print("-- Trying to read centroids of relations from database")
         relationsCentroids = centroids.get_relations_centroids()
 
         if not relationsCentroids:
-            print "--- I didn't find centroids of relations in the database"
-            print "--- Launch osm_centroids.py script with `-r` option to calculate them"
-            print "--- This may take several hours."
+            print("--- I didn't find centroids of relations in the database")
+            print("--- Launch osm_centroids.py script with `-r` option to calculate them")
+            print("--- This may take several hours.")
 
         if relationsCentroids:
-            print "-- Saving centroids of relations into tags data"
+            print("-- Saving centroids of relations into tags data")
             self.save_centroids(relationsCentroids, "r")
 
             relationsDimensions = centroids.get_relations_dimensions()
@@ -204,11 +204,11 @@ class ParseOSMData():
                                              "users": []}
                         tagsData[tag]["osmIds"].append(osmId)
                         tagsData[tag]["users"].append(user)
-                    #print element.tag, osmId, allObjects[osmId]
+                    #print(element.tag, osmId, allObjects[osmId])
                     tags = []       # reset tags
             element.clear()
-        #print "\nWikipedia tags number (with duplicate): ", len(allTags)
-        #print "\nwikipedia tags number (no duplicate): ", len(tagsData)
+        #print("\nWikipedia tags number (with duplicate): ", len(allTags))
+        #print("\nwikipedia tags number (no duplicate): ", len(tagsData))
         return allTags, tagsData
 
     def extract_titles_from_tags(self):
@@ -393,7 +393,7 @@ class ParseOSMData():
                     #language corresponding to a section of another language
                     if language in self.converted and foreignTitle in self.converted[language]:
                         #We already know the title of this article in preferred language
-                        #print "translation already known", language, foreignTitle
+                        #print("translation already known", language, foreignTitle)
                         continue
                     if language not in titlesPerLang:
                         titlesPerLang[language] = []
@@ -412,7 +412,7 @@ class ParseOSMData():
             for fiftyTitles in [sorted(titles[i:i + 50]) for i in range(0, len(titles), 50)]:
                 titlesString = "|".join(fiftyTitles).replace("_", " ")
                 stringsPerLang[language].append(titlesString)
-            print "  %d articles must be translated from %s" % (len(titles), language)
+            print("  %d articles must be translated from %s" % (len(titles), language))
 
         #Query Wikipedia API, 50 titles of the same language per time
         self.nonexistent = {}        # non existent page or wrong url
@@ -420,7 +420,7 @@ class ParseOSMData():
         #stringsPerLang = {"hr" : stringsPerLang["hr"]}      #debugging
 
         for language, fiftyStringsList in stringsPerLang.iteritems():
-            print "\n- Get translations for %s titles:" % language
+            print("\n- Get translations for %s titles:" % language)
             for fiftyStrings in fiftyStringsList:
                 answer = self.download_converted_titles(language, fiftyStrings)
                 #answer = True
@@ -444,24 +444,24 @@ class ParseOSMData():
                                   {'User-Agent': self.app.user_agent})
         if answer == "y":
             try:
-                #print "\n", url
+                #print("\n", url)
                 wikipediaAnswer = urllib2.urlopen(request)
             except:
-                print "\n Wrong url because lang was wrong:", string
+                print("\n Wrong url because lang was wrong:", string)
                 titles = [t.replace(" ", "_") for t in titlesString.split("|")]
                 self.add_to_nonexistent(lang, titles)
-                # print "\n- nonexistent titles returned from Wikipedia:"
-                # print titles
+                # print("\n- nonexistent titles returned from Wikipedia:")
+                # print(titles)
                 return False
             else:
                 if wikipediaAnswer is None:
-                    print "\n Answer None"
+                    print("\n Answer None")
                     titles = [t.replace(" ", "_") for t in titlesString.split("|")]
                     self.add_to_nonexistent(lang, titles)
-                    print "\n- nonexistent titles returned from Wikipedia:\n", titles
+                    print("\n- nonexistent titles returned from Wikipedia:\n", titles)
                     return False
                 else:
-                    #print "\nOK, Saving answer"
+                    #print("\nOK, Saving answer")
                     file_out = open(self.app.WIKIPEDIAANSWER, "w")
                     file_out.write(wikipediaAnswer.read())
                     file_out.close()
@@ -471,41 +471,41 @@ class ParseOSMData():
         """Extract form Wikipedia answer correspondeces between foreing
            and preferred language article
         """
-        #print "  parsing answer"
+        #print("  parsing answer")
         converted = {}      # {foreign title : translated title, ...}
         nonexistent = []    # [nonexistent title, ...]
         for event, element in etree.iterparse(self.app.WIKIPEDIAANSWER, events=("end",)):
             if element.tag == "page":
                 title = element.get("title")
                 if "invalid" in element.keys() or "missing" in element.keys():
-                    #print "X doesn't exist", title, "in language", language
+                    #print("X doesn't exist", title, "in language", language)
                     nonexistent.append(title.replace(" ", "_"))
                 elif len(element.getchildren()) == 0:
-                    #print "X article in preferred lang is missing or foreign \
+                    #print("X article in preferred lang is missing or foreign \)
 #is a redirect (this is wrong for WIWOSM rules). Ignore it."
                     continue
                 elif len(element.getchildren()) != 0:
                     prefTitle = element[0][0].text
-                    #print "OK, converted: %s ---> %s:" % (title, prefTitle)
+                    #print("OK, converted: %s ---> %s:" % (title, prefTitle))
                     converted[title.replace(" ", "_")] = prefTitle.replace(" ", "_")
         self.add_to_nonexistent(language, nonexistent)
         self.add_to_converted(language, converted)
-        #print "\n parsing done."
+        #print("\n parsing done.")
 
     def add_to_nonexistent(self, language, titles):
         if language not in self.nonexistent:
             self.nonexistent[language] = []
         self.nonexistent[language].extend(titles)
-        print "  nonexistent titles in %s: %d" % (language, len(titles))
+        print("  nonexistent titles in %s: %d" % (language, len(titles)))
         for title in titles:
-            print " ", title.encode("utf-8")
+            print(" ", title.encode("utf-8"))
 
     def add_to_converted(self, language, newconverted):
         if language not in self.converted:
             self.converted[language] = {}
         for foreignTitle, prefTitle in newconverted.iteritems():
             self.converted[language][foreignTitle] = prefTitle
-        #print "\n- titles converted to preferred language: %s, (%d)" % (language, len(newconverted))
+        #print("\n- titles converted to preferred language: %s, (%d)" % (language, len(newconverted)))
 
 ### Manage CSV file with titles translations ###########################
     def old_converted_titles(self):
@@ -531,12 +531,12 @@ class ParseOSMData():
     def print_translations(self, c):
         for lang, translations in c.iteritems():
             print
-            print "language:", lang
+            print("language:", lang)
             for foreign, preferred in translations.iteritems():
-                print "%s --> %s" % (foreign, preferred)
+                print("%s --> %s" % (foreign, preferred))
 
     def save_updated_conversions(self):
-        print "\n- Saving file with Wikipedia articles' titles translations"
+        print("\n- Saving file with Wikipedia articles' titles translations")
         fileName = os.path.join(self.app.WIKIPEDIAANSWERS, "conversions.csv")
         oldFileName = os.path.join(self.app.WIKIPEDIAANSWERS, "old_conversions.csv")
         call("cp '%s' '%s'" % (fileName, oldFileName), shell=True)
@@ -549,4 +549,4 @@ class ParseOSMData():
                 writer.writerow(row)
                 n += 1
         fileOut.close()
-        print "  %d titles of articles have been translated to the preferred language and saved to '%s'" % (n, fileName)
+        print("  %d titles of articles have been translated to the preferred language and saved to '%s'" % (n, fileName))

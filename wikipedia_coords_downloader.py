@@ -42,16 +42,16 @@ class CoordsDownloader:
         # with open("titlestodownload", "w") as f:
         #     f.write("\n".join([t.encode("utf-8") for t in titles_to_check]))
 
-        print "Titles:", len(self.titles)
-        print "checked in the past: {0}, with coordinates {1}".format(
-              len(self.titles_coords), titles_coords_num)
+        print("Titles:", len(self.titles))
+        print("checked in the past: {0}, with coordinates {1}".format(
+              len(self.titles_coords), titles_coords_num))
 
         if len(titles_to_check) == 0:
-            print ("The coordinates of all the articles have already been "
-                   "downloaded.")
+            print("The coordinates of all the articles have already been "
+                  "downloaded.")
             return
 
-        print "to be checked:", len(titles_to_check)
+        print("to be checked:", len(titles_to_check))
 
         # Query Wikpedia for coordinates
         self.query_wikipedia(titles_to_check, answer_file)
@@ -87,22 +87,22 @@ class CoordsDownloader:
                              0, len(titles_to_check), 50)]:
             titles_string = "|".join(fifty_titles)
             titles_strings.append(titles_string)
-        print "{0} queries of 50 titles each will be necessay".format(
-              len(titles_strings))
+        print("{0} queries of 50 titles each will be necessay".format(
+              len(titles_strings)))
 
         # Download
-        print "\n- Download coordinates from Wikipedia"
+        print("\n- Download coordinates from Wikipedia")
         for i, titles_string in enumerate(titles_strings):
             continue_string = ""
             cocontinue_string = ""
-            print "\nrequest: {0}/{1}".format(i + 1, len(titles_strings))
+            print("\nrequest: {0}/{1}".format(i + 1, len(titles_strings)))
 
             # Debugging
             # answer = raw_input("\n  Download 50 titles' coordinates "
             #                    "from Wikipedia?\n  [y/N]")
             answer = "y"
             if answer.lower() != "y":
-                print "  Download stopped."
+                print("  Download stopped.")
                 break
 
             while True:
@@ -118,7 +118,7 @@ class CoordsDownloader:
                 if (continue_string, cocontinue_string) == ("", ""):
                     break
                 else:
-                    print "continue", continue_string, cocontinue_string
+                    print("continue", continue_string, cocontinue_string)
             if not wikipedia_answer:
                 break
 
@@ -144,11 +144,11 @@ class CoordsDownloader:
         try:
             wikipedia_answer = urllib2.urlopen(request)
         except:
-            print ("\n* a problem occurred during download:\n"
-                   "{0}, {1}, {2}\ncontinue...".format(
-                       titles_string.encode("utf-8"),
-                       continue_string.encode("utf-8"),
-                       cocontinue_string.encode("utf-8")))
+            print("\n* a problem occurred during download:\n"
+                  "{0}, {1}, {2}\ncontinue...".format(
+                      titles_string.encode("utf-8"),
+                      continue_string.encode("utf-8"),
+                      cocontinue_string.encode("utf-8")))
             return False
         else:
             with open(answer_file, "w") as f:
@@ -166,10 +166,10 @@ class CoordsDownloader:
             if "coordinates" in page:
                 for coords in page["coordinates"]:
                     self.titles_coords[title] = [coords["lat"], coords["lon"]]
-            print "{0}/{1} {2} {3}".format(len(self.titles_coords),
+            print("{0}/{1} {2} {3}".format(len(self.titles_coords),
                                            len(self.titles),
                                            title.encode("utf-8"),
-                                           self.titles_coords[title])
+                                           self.titles_coords[title]))
         if "continue" in data:
             return (data["continue"]["continue"],
                     data["continue"]["cocontinue"])
@@ -220,4 +220,4 @@ if __name__ == "__main__":
                      "answer.json",
                      "it",
                      [t.decode("utf-8") for t in titles])
-    print "\nDone."
+    print("\nDone.")
