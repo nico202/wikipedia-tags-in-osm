@@ -68,7 +68,7 @@ def download_a_new_category(app, themeName, categoryName):
        and save it to: CATSCANDIR/theme name/category name.json
     """
     print("\n- Download the list of sub-categories and articles of a new Wikipedia category.\n  %s" % categoryName.encode("utf-8"))
-    #response = raw_input("\n- Scarico dati categoria %s da Quick Intersection?\n[y/N]" % categoryName.encode("utf-8"))
+    #response = input("\n- Scarico dati categoria %s da Quick Intersection?\n[y/N]" % categoryName.encode("utf-8"))
     response = "y"
     if response not in ("y", "Y"):
         return False
@@ -168,7 +168,7 @@ def download_templates(app, titlesString, continueString, tlcontinueString):
     if continueString != "":
         url += '%s&tlcontinue=%s' % (parse.quote_plus(continueString), parse.quote_plus(tlcontinueString))
     #debugging
-    #answer = raw_input("\n  Download 50 titles status from Wikipedia?\n%s\n[y/N]" % url)
+    #answer = input("\n  Download 50 titles status from Wikipedia?\n%s\n[y/N]" % url)
     answer = "y"
     request_obj = request.Request(url, None, {'User-Agent': app.user_agent})
     if answer in ("y", "Y"):

@@ -251,7 +251,7 @@ To repeat the updating process, launch the script again with the `-u` option.")
         if self.args.category_info:
             self.print_category_info(self.args.category_info.replace(" ", "_"))
             if self.args.create_webpages:
-                raw_input("\nContinue?[Press any key]")
+                input("\nContinue?[Press any key]")
         # write categories trees to text files (uncomment lines)
         if self.print_categories_to_text_files == "true":
             for theme in self.themes:
@@ -379,7 +379,7 @@ The number of tagged articles will replace that of the lust run in the tags' num
         if not os.path.isfile(configFile):
             call("cp %s %s" % ("config.template", configFile), shell=True)
             print("* A new config file has been created:\n  %s\n\n  Fill it with the necessary information (see README.md and config.template)." % configFile)
-            answer = raw_input("\n  Continue? [Y/n]\n")
+            answer = input("\n  Continue? [Y/n]\n")
             if answer not in ("", "Y", "y"):
                 sys.exit()
         configparser = ConfigParser.RawConfigParser()

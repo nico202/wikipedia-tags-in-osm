@@ -98,7 +98,7 @@ class CoordsDownloader:
             print("\nrequest: {0}/{1}".format(i + 1, len(titles_strings)))
 
             # Debugging
-            # answer = raw_input("\n  Download 50 titles' coordinates "
+            # answer = input("\n  Download 50 titles' coordinates "
             #                    "from Wikipedia?\n  [y/N]")
             answer = "y"
             if answer.lower() != "y":

@@ -437,7 +437,7 @@ class ParseOSMData():
         url = ("https://{0}.wikipedia.org/w/api.php?action=query"
                "&prop=langlinks&lllang=it&format=xml&lllimit=55&titles={1}"
                "&maxlag=5".format(lang.encode("utf-8"), string))
-        #answer = raw_input("\n  Download from Wikipedia 50 titles translations from %s?\n  titles:\n%s\n  url:\n%s\n  [y|n]" % (lang.encode("utf-8"), titlesString.encode("utf-8"), url))
+        #answer = input("\n  Download from Wikipedia 50 titles translations from %s?\n  titles:\n%s\n  url:\n%s\n  [y|n]" % (lang.encode("utf-8"), titlesString.encode("utf-8"), url))
         answer = "y"
         request_obj = request.Request(url, None,
                                       {'User-Agent': self.app.user_agent})
