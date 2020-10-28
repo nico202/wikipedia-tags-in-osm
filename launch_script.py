@@ -128,7 +128,7 @@ class App:
         if len(sys.argv) == 1:
             parser.print_help()
             sys.exit(1)
-        os.chdir(os.path.dirname(sys.argv[0]))
+        os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
         #Configurations
         themesAndCatsNames = self.read_config()
