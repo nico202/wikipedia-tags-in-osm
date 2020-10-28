@@ -142,7 +142,7 @@ class Helpers:
             lat = article.OSMcoords[0]
             lon = article.OSMcoords[1]
             dim = article.OSMdim
-            wikipedia_title = urllib.quote_plus(article.name.encode("utf-8"))
+            wikipedia_title = urllib.quote_plus(article.name)
 
             a_tag = '<a href="../app/login?lat={lat}&lon={lon}">'\
                     '{{span}}</a>'.format(lat=lat, lon=lon)
@@ -167,7 +167,7 @@ class Helpers:
         url = "http://toolserver.org/~kolossos/osm-add-tags/index.php?"
         url += "lang=it"
         url += "&amp;bbox=%s" % self.app.COUNTRYBBOX
-        url += "&amp;cat=%s" % urllib.quote_plus(category.name.encode("utf-8"))
+        url += "&amp;cat=%s" % urllib.quote_plus(category.name)
         url += "&amp;key=*&amp;value=*&amp;basedeep=10&amp;types=*&amp;request=Submit&amp;iwl=yes"
         title = self.app._("Search the objects in OSM by name and tag them automatically (WIWOSM add-tags)")
         img = "{{root}}img/add-tags.png"
@@ -470,8 +470,6 @@ class Creator():
 
         fileOut = open(os.path.join(outDir, fileName), "w")
 
-        if isinstance(text, unicode):
-            text = text.encode("utf-8")
         fileOut.write(text)
         fileOut.close()
 
@@ -649,7 +647,5 @@ class Redirect():
         code = indexTemplate.render(lang=locale_langcode)
         fileOut = open(os.path.join(self.app.HTMLDIR, 'index.html'), "w")
 
-        if isinstance(code, unicode):
-            code = code.encode("utf-8")
         fileOut.write(code)
         fileOut.close()

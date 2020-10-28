@@ -358,7 +358,7 @@ The number of tagged articles will replace that of the lust run in the tags' num
                 lat, lon = coords
                 feature = {"type": "Feature",
                            "properties": {"id": str(i),
-                                          "title": title.replace("_", " ").encode("utf-8")
+                                          "title": title.replace("_", " ")
                                          },
                            "geometry": {"type": "Point",
                                         "coordinates": [lon, lat]

@@ -120,13 +120,13 @@ class Category:
             #dedicated webpage
             self.mainCategory = self
             self.mainCategory.allSubcategories = []
-            self.updateTime = self.app.categoriesDates[self.name.encode("utf-8")]
+            self.updateTime = self.app.categoriesDates[self.name]
         else:
             self.mainCategory = mainCategory
         self.wikipedia_url = "http://{0}.wikipedia.org/wiki/{1}:{2}".format(
                                  app.WIKIPEDIALANG,
                                  app.category_translation,
-                                 urllib.quote_plus(self.name.encode("utf-8")))
+                                 urllib.quote_plus(self.name))
 
         #Extract categories info from Quick Intersection data
         #print("\n- reading Quick Intersection data")
@@ -174,8 +174,7 @@ class Category:
                 print("\nWARNING: Infinite loop."
                       "\n\"{0}\" is a sub-category of \"{1}\" but it is also "
                       "a parent category, thus it will be discarded.".format(
-                          subcatName.encode("utf-8"),
-                          self.name.encode("utf-8")))
+                          subcatName, self.name))
                 continue
             subIdx = "%s_%s" % (self.ident, subIdx)
             subcategory = Category(app, subIdx, catscanFile, subcatName,
@@ -337,7 +336,8 @@ class Category:
     def set_has_template_in_article(self, article):
         if article.isMappable and article.inOSM and not hasattr(article, "hasTemplate"):
             if article.name not in self.app.templatesStatus:
-                print("* Error: this article is missing from templatesStatus dictionary:", article.name.encode("utf-8"))
+                print("* Error: this article is missing from templatesStatus dictionary:",
+                      article.name)
             else:
                 if self.app.templatesStatus[article.name] == "True":
                     article.hasTemplate = True
@@ -398,10 +398,10 @@ class Category:
     def print_info(self):
         """Print info about this category (for debugging)
         """
-        print("\nName: %s" % self.name.replace("_", " ").encode("utf-8"))
+        print("\nName: %s" % self.name.replace("_", " "))
         print("Mappable subcategories (%d):" % len(self.subcategories))
         for subcat in self.subcategories:
-            print("             %s" % subcat.name.replace("_", " ").encode("utf-8"))
+            print("             %s" % subcat.name.replace("_", " "))
         print("Tagged articles: %s (%d)" % (self.progress["allMArticles"]["string"],
                                             self.progress["allMArticles"]["num"]))
         print("Graph:")
@@ -414,7 +414,7 @@ class Category:
         rows = ""
         #category name
         nonMappable = "(NON MAPPABLE) "
-        categoryName = self.name.replace("_", " ").encode("utf-8")
+        categoryName = self.name.replace("_", " ")
         if not self.isMappable:
             categoryName = nonMappable + categoryName
         categoryName = " " + categoryName
@@ -430,7 +430,7 @@ class Category:
             tree += "| "
         #articles names
         for article in self.articles:
-            articleName = article.name.replace("_", " ").encode("utf-8")
+            articleName = article.name.replace("_", " ")
             if not article.isMappable:
                 articleName = nonMappable + articleName
             else:
@@ -495,7 +495,7 @@ class Category:
 
     def write_json_file(self):
         import json
-        ifile = open("./html/json/%s.json" % self.name.encode("utf-8"), "w")
+        ifile = open("./html/json/%s.json" % self.name, "w")
         data = json.dumps(self.build_json_tree(), indent=4)
         ifile.write(data)
         ifile.close()
@@ -510,8 +510,8 @@ class Article:
         self.name = name
         self.wikipedia_url = "http://{0}.wikipedia.org/wiki/{1}".format(
                                  app.WIKIPEDIALANG,
-                                 urllib.quote_plus(self.name.encode("utf-8")))
-        self.wiwosmUrl = "http://toolserver.org/~kolossos/openlayers/kml-on-ol-json3.php?lang=it&title=%s" % self.name.encode("utf-8")
+                                 urllib.quote_plus(self.name))
+        self.wiwosmUrl = "http://toolserver.org/~kolossos/openlayers/kml-on-ol-json3.php?lang=it&title=%s" % self.name
         self.OSMcoords = []
         self.OSMdim = 0
 

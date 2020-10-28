@@ -47,7 +47,6 @@ def check_catscan_data(app, themesAndCatsNames):
             categoryCatscanFile = os.path.join(app.CATSCANDIR,
                                                themeName,
                                                "%s.json" % categoryName)
-            categoryCatscanFile = categoryCatscanFile.encode("utf-8")
             if not os.path.isfile(categoryCatscanFile):
                 if not themeName in needInfo:
                     needInfo[themeName] = []
@@ -67,8 +66,8 @@ def download_a_new_category(app, themeName, categoryName):
        from quick_intersection (http://tools.wmflabs.org/catscan2/quick_intersection.php?)
        and save it to: CATSCANDIR/theme name/category name.json
     """
-    print("\n- Download the list of sub-categories and articles of a new Wikipedia category.\n  %s" % categoryName.encode("utf-8"))
-    #response = input("\n- Scarico dati categoria %s da Quick Intersection?\n[y/N]" % categoryName.encode("utf-8"))
+    print("\n- Download the list of sub-categories and articles of a new Wikipedia category.\n  %s" % categoryName)
+    #response = input("\n- Scarico dati categoria %s da Quick Intersection?\n[y/N]" % categoryName)
     response = "y"
     if response not in ("y", "Y"):
         return False
@@ -76,11 +75,11 @@ def download_a_new_category(app, themeName, categoryName):
     if themeName not in os.listdir(app.CATSCANDIR):
         os.makedirs(os.path.join(app.CATSCANDIR, themeName))
 
-    #Download the JSON file with subcategories and articles of the requested category
+    # Download the JSON file with subcategories and articles of the requested category
     url = "https://tools.wmflabs.org/quick-intersection/index.php?"
     url += "lang=%s" % app.WIKIPEDIALANG
     url += "&project=wikipedia"
-    url += "&cats=" + parse.quote_plus(categoryName.encode("utf-8"))
+    url += "&cats=" + parse.quote_plus(categoryName)
     url += "&ns=*&depth=-1&max=30000&start=0&format=json&catlist=1&redirects=none&callback="
 
     print("  url:\n{0}\n  downloading data from Quick Intersection...".format(
@@ -99,8 +98,8 @@ def download_a_new_category(app, themeName, categoryName):
     configparser = ConfigParser.RawConfigParser()
     configparser.optionxform = str
     configparser.read(catsDatesFile)
-    configparser.set("catscan dates", categoryName.encode("utf-8"), categoryDate)
-    with open(catsDatesFile, 'wb') as configfile:
+    configparser.set("catscan dates", categoryName, categoryDate)
+    with open(catsDatesFile, 'w') as configfile:
         configparser.write(configfile)
     #update category date
     app.categoriesDates[categoryName] = categoryDate
@@ -161,7 +160,7 @@ def update_templates_status(app):
 def download_templates(app, titlesString, continueString, tlcontinueString):
     """Query Wikipedia API for Coord template in articles
     """
-    titles = parse.quote_plus(titlesString.replace("_", " ").encode("utf-8"))
+    titles = parse.quote_plus(titlesString.replace("_", " "))
     url = ('http://{0}.wikipedia.org/w/api.php?action=query'
            '&format=json&titles={1}&prop=templates&tltemplates=Template:Coord'
            '&maxlag=5&continue='.format(app.WIKIPEDIALANG, titles))
@@ -201,7 +200,7 @@ def parse_wikipedia_answer(app):
         else:
             status = str("templates" in pageData)
             app.templatesStatus[title] = status
-        #print("aggiunto ", title.encode("utf-8"), status.encode("utf-8"))
+        #print("aggiunto ", title, status)
     if "continue" in data:
         return (data["continue"]["continue"], data["continue"]["tlcontinue"])
     else:
@@ -220,7 +219,7 @@ def save_updated_templates_status(app):
         status = app.templatesStatus[title]
         if status == "True":
             withTemplate += 1
-        writer.writerow([title.encode("utf-8"), status])
+        writer.writerow([title, status])
     fileOut.close()
     #Print results
     print("  Tagged articles   : %d" % len(app.templatesStatus))
@@ -266,5 +265,5 @@ def add_wikipedia_coordinates(app):
         list(set(app.mappable_titles_without_coords))
     with open(os.path.join(
               "data", "nuts4nuts", "articles_to_scan.txt"), "w") as f:
-        f.write("\n".join(title.encode('utf-8')
+        f.write("\n".join(title
                 for title in app.mappable_titles_without_coords))

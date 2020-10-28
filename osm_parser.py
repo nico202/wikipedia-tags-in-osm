@@ -176,10 +176,6 @@ class ParseOSMData():
             if "k" in element.keys():
                 key = element.get("k")
                 value = element.get("v")
-                if not isinstance(key, unicode):
-                    key = key.decode("utf-8")
-                if not isinstance(value, unicode):
-                    value = value.decode("utf-8")
                 tagString = "%s=%s" % (key, value)
                 if tagString in self.falsePositiveTags:
                     continue
@@ -433,11 +429,11 @@ class ParseOSMData():
         """Query Wikipedia API for titles conversion from foreing to
            preferred language
         """
-        string = parse.quote_plus(titlesString.encode("utf-8"))
+        string = parse.quote_plus(titlesString)
         url = ("https://{0}.wikipedia.org/w/api.php?action=query"
                "&prop=langlinks&lllang=it&format=xml&lllimit=55&titles={1}"
-               "&maxlag=5".format(lang.encode("utf-8"), string))
-        #answer = input("\n  Download from Wikipedia 50 titles translations from %s?\n  titles:\n%s\n  url:\n%s\n  [y|n]" % (lang.encode("utf-8"), titlesString.encode("utf-8"), url))
+               "&maxlag=5".format(lang, string))
+        #answer = input("\n  Download from Wikipedia 50 titles translations from %s?\n  titles:\n%s\n  url:\n%s\n  [y|n]" % (lang, titlesString, url))
         answer = "y"
         request_obj = request.Request(url, None,
                                       {'User-Agent': self.app.user_agent})
@@ -497,7 +493,7 @@ class ParseOSMData():
         self.nonexistent[language].extend(titles)
         print("  nonexistent titles in %s: %d" % (language, len(titles)))
         for title in titles:
-            print(" ", title.encode("utf-8"))
+            print(" ", title)
 
     def add_to_converted(self, language, newconverted):
         if language not in self.converted:
@@ -544,7 +540,7 @@ class ParseOSMData():
         n = 0
         for language, data in self.converted.items():
             for foreignTitle, preferredTitle in data.items():
-                row = [language, foreignTitle.encode("utf-8"), preferredTitle.encode("utf-8")]
+                row = [language, foreignTitle, preferredTitle]
                 writer.writerow(row)
                 n += 1
         fileOut.close()

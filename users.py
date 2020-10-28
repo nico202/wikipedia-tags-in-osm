@@ -127,11 +127,11 @@ to `data/OSM/tags.csv`.")
         """
         print("\n  New tags || Mappers")
         for tag, usersList in newTags.items():
-            print(tag.encode("utf-8"), "||", [u.encode("utf-8") for u in usersList])
+            print(tag, "||", [u for u in usersList])
         print(len(newTags))
         print("\n  Mappers || Tags numbers")
         for user, tagsNum in users.items():
-            print(user.encode("utf-8"), "||", tagsNum)
+            print(user, "||", tagsNum)
         print(len(users))
 
     def save_tags_per_user(self, app, todayTagsPerUser):
@@ -158,7 +158,7 @@ to `data/OSM/tags.csv`.")
         outFile = open(usersFileName, 'wb')
         writer = csv.writer(outFile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_ALL)
         for user, userData in tagsPerUser.items():
-            writer.writerow([user.encode("utf-8"),
+            writer.writerow([user,
                              userData["tot"],
                              userData["today"],
                              userData["today date"]])
@@ -176,7 +176,7 @@ to `data/OSM/tags.csv`.")
                 if i > len(tagsList) - 1:
                     row.append("")
                 else:
-                    row.append(tagsList[i].encode("utf-8"))
+                    row.append(tagsList[i])
             rows.append(row)
         outFile = open(tagsFileName, 'wb')
         writer = csv.writer(outFile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_ALL)

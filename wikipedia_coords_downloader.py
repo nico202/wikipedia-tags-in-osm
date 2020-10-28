@@ -40,7 +40,7 @@ class CoordsDownloader:
             t for t in self.titles if t not in self.titles_coords]
 
         # with open("titlestodownload", "w") as f:
-        #     f.write("\n".join([t.encode("utf-8") for t in titles_to_check]))
+        #     f.write("\n".join([t for t in titles_to_check]))
 
         print("Titles:", len(self.titles))
         print("checked in the past: {0}, with coordinates {1}".format(
@@ -127,7 +127,7 @@ class CoordsDownloader:
         """Query Wikipedia API for articles' coordinates
         """
         titles = parse.quote_plus(
-            titles_string.replace("_", " ").encode("utf-8"))
+            titles_string.replace("_", " "))
         url = ('http://{0}.wikipedia.org/w/api.php?action=query'
                '&format=json'
                '&titles={1}'
@@ -146,9 +146,7 @@ class CoordsDownloader:
         except:
             print("\n* a problem occurred during download:\n"
                   "{0}, {1}, {2}\ncontinue...".format(
-                      titles_string.encode("utf-8"),
-                      continue_string.encode("utf-8"),
-                      cocontinue_string.encode("utf-8")))
+                      titles_string, continue_string, cocontinue_string))
             return False
         else:
             with open(answer_file, "w") as f:
@@ -168,7 +166,7 @@ class CoordsDownloader:
                     self.titles_coords[title] = [coords["lat"], coords["lon"]]
             print("{0}/{1} {2} {3}".format(len(self.titles_coords),
                                            len(self.titles),
-                                           title.encode("utf-8"),
+                                           title,
                                            self.titles_coords[title]))
         if "continue" in data:
             return (data["continue"]["continue"],
@@ -185,9 +183,7 @@ class CoordsDownloader:
                     lat, lon = coordinates
                 else:
                     lat, lon = "", ""
-                f.write("{0}\t{1}\t{2}".format(title.encode("utf-8"),
-                                               lat,
-                                               lon))
+                f.write("{0}\t{1}\t{2}".format(title, lat, lon))
                 if i < len(self.titles_coords) - 1:
                     f.write("\n")
 
