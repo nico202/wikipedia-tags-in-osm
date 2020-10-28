@@ -407,8 +407,9 @@ The number of tagged articles will replace that of the lust run in the tags' num
                 configparser.get("general", "regions names") == "":
             self.regionsNames = []
         else:
-            self.regionsNames = [r.decode("utf-8") \
-            for r in configparser.get("general", "regions names").split("|")]
+            self.regionsNames = [
+                r for r in configparser.get("general", "regions names").split("|")
+            ]
         # directory where html files must be copied after creation
         #(for example, Dropbox dir)
         self.OUTDIR = configparser.get("general", "outdir")
@@ -428,8 +429,8 @@ The number of tagged articles will replace that of the lust run in the tags' num
         #themes and categories
         themesAndCatsNames = {}
         for themeName in configparser.options("themes"):
-            categoriesNames = [c.strip().replace(" ", "_").decode("utf-8") for c in configparser.get("themes", themeName).split("|")]
-            themesAndCatsNames[themeName.replace(" ", "_").decode("utf-8")] = categoriesNames
+            categoriesNames = [c.strip().replace(" ", "_") for c in configparser.get("themes", themeName).split("|")]
+            themesAndCatsNames[themeName.replace(" ", "_")] = categoriesNames
         # Wikipedia categories data, downloaded from quick_intersection
         self.CATSCANDIR = os.path.join("data", "wikipedia", "catscan")
         self.make_dir(self.CATSCANDIR)
@@ -532,7 +533,7 @@ the tag here and it will not be detected as error anymore.")
                        "redirects": redirects}
         for itemsType, itemsList in nonMappable.iteritems():
             fileName = open(os.path.join(self.NONMAPPABLE, itemsType), "r")
-            nonMappableItems = fileName.read().replace(" ", "_").decode("utf-8").splitlines()
+            nonMappableItems = fileName.read().replace(" ", "_").splitlines()
             fileName.close()
             nonMappableItems.sort()
             nonMappable[itemsType] = nonMappableItems
