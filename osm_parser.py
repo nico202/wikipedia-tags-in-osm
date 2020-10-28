@@ -22,8 +22,7 @@
 
 import os
 from lxml import etree
-import urllib
-import urllib2
+from urllib import parse, request
 import csv
 from subprocess import call
 
@@ -272,7 +271,7 @@ class ParseOSMData():
                     else:
                         ## wikipedia = url
                         self.add_title_to_dict(self.badTags, tagString, osmIds)
-                        value = urllib.unquote(value)
+                        value = parse.unquote(value)
                         params = value.split("/")
                         if len(params) >= 4:
                             if params[2][-13:] == "wikipedia.org":
@@ -321,7 +320,7 @@ class ParseOSMData():
                     else:
                         ### wikipedia:* = url
                         self.add_title_to_dict(self.badTags, tagString, osmIds)
-                        value = urllib.unquote(value)
+                        value = parse.unquote(value)
                         params = value.split("/")
                         if len(params) >= 4:
                             if params[2][-13:] == "wikipedia.org":
@@ -434,18 +433,18 @@ class ParseOSMData():
         """Query Wikipedia API for titles conversion from foreing to
            preferred language
         """
-        string = urllib.quote_plus(titlesString.encode("utf-8"))
+        string = parse.quote_plus(titlesString.encode("utf-8"))
         url = ("https://{0}.wikipedia.org/w/api.php?action=query"
                "&prop=langlinks&lllang=it&format=xml&lllimit=55&titles={1}"
                "&maxlag=5".format(lang.encode("utf-8"), string))
         #answer = raw_input("\n  Download from Wikipedia 50 titles translations from %s?\n  titles:\n%s\n  url:\n%s\n  [y|n]" % (lang.encode("utf-8"), titlesString.encode("utf-8"), url))
         answer = "y"
-        request = urllib2.Request(url, None,
-                                  {'User-Agent': self.app.user_agent})
+        request_obj = request.Request(url, None,
+                                      {'User-Agent': self.app.user_agent})
         if answer == "y":
             try:
                 #print("\n", url)
-                wikipediaAnswer = urllib2.urlopen(request)
+                wikipediaAnswer = request.urlopen(request_obj)
             except:
                 print("\n Wrong url because lang was wrong:", string)
                 titles = [t.replace(" ", "_") for t in titlesString.split("|")]

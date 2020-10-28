@@ -25,7 +25,8 @@
 
 import os
 import urllib
-import urllib2
+# provides quote_plus
+from urllib import parse, request
 import csv
 import json
 from subprocess import call
@@ -79,13 +80,13 @@ def download_a_new_category(app, themeName, categoryName):
     url = "https://tools.wmflabs.org/quick-intersection/index.php?"
     url += "lang=%s" % app.WIKIPEDIALANG
     url += "&project=wikipedia"
-    url += "&cats=" + urllib.quote_plus(categoryName.encode("utf-8"))
+    url += "&cats=" + parse.quote_plus(categoryName.encode("utf-8"))
     url += "&ns=*&depth=-1&max=30000&start=0&format=json&catlist=1&redirects=none&callback="
 
     print("  url:\n{0}\n  downloading data from Quick Intersection...".format(
         url))
-    request = urllib2.Request(url, None, {'User-Agent': app.user_agent})
-    data = urllib2.urlopen(request)
+    request_obj = request.Request(url, None, {'User-Agent': app.user_agent})
+    data = request.urlopen(request_obj)
     filename = os.path.join(app.CATSCANDIR, themeName, "%s.json" % categoryName)
     csvFile = open(filename, 'w')
     csvFile.write(data.read())
@@ -160,19 +161,19 @@ def update_templates_status(app):
 def download_templates(app, titlesString, continueString, tlcontinueString):
     """Query Wikipedia API for Coord template in articles
     """
-    titles = urllib.quote_plus(titlesString.replace("_", " ").encode("utf-8"))
+    titles = parse.quote_plus(titlesString.replace("_", " ").encode("utf-8"))
     url = ('http://{0}.wikipedia.org/w/api.php?action=query'
            '&format=json&titles={1}&prop=templates&tltemplates=Template:Coord'
            '&maxlag=5&continue='.format(app.WIKIPEDIALANG, titles))
     if continueString != "":
-        url += '%s&tlcontinue=%s' % (urllib.quote_plus(continueString), urllib.quote_plus(tlcontinueString))
+        url += '%s&tlcontinue=%s' % (parse.quote_plus(continueString), parse.quote_plus(tlcontinueString))
     #debugging
     #answer = raw_input("\n  Download 50 titles status from Wikipedia?\n%s\n[y/N]" % url)
     answer = "y"
-    request = urllib2.Request(url, None, {'User-Agent': app.user_agent})
+    request_obj = request.Request(url, None, {'User-Agent': app.user_agent})
     if answer in ("y", "Y"):
         try:
-            wikipediaAnswer = urllib2.urlopen(request)
+            wikipediaAnswer = request.urlopen(request_obj)
         except:
             print("\n* a problem occurred during downloading:", titlesString, continueString, tlcontinueString)
             return False

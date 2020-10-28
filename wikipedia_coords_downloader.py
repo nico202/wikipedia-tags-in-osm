@@ -23,7 +23,7 @@
 
 import os
 import urllib
-import urllib2
+from urllib import parse, request
 import json
 
 
@@ -126,7 +126,7 @@ class CoordsDownloader:
                              cocontinue_string):
         """Query Wikipedia API for articles' coordinates
         """
-        titles = urllib.quote_plus(
+        titles = parse.quote_plus(
             titles_string.replace("_", " ").encode("utf-8"))
         url = ('http://{0}.wikipedia.org/w/api.php?action=query'
                '&format=json'
@@ -137,12 +137,12 @@ class CoordsDownloader:
                '&continue='.format(self.wikipedia_lang, titles))
         if continue_string != "":
             url += '{0}&cocontinue={1}'.format(
-                       urllib.quote_plus(continue_string),
-                       urllib.quote_plus(cocontinue_string))
+                       parse.quote_plus(continue_string),
+                       parse.quote_plus(cocontinue_string))
 
-        request = urllib2.Request(url, None, {'User-Agent': self.user_agent})
+        request = request.Request(url, None, {'User-Agent': self.user_agent})
         try:
-            wikipedia_answer = urllib2.urlopen(request)
+            wikipedia_answer = request.urlopen(request)
         except:
             print("\n* a problem occurred during download:\n"
                   "{0}, {1}, {2}\ncontinue...".format(
