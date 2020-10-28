@@ -33,7 +33,7 @@ from subprocess import call
 import configparser
 import time
 from wikipedia_coords_downloader import CoordsDownloader
-
+from shutil import copyfile
 
 ### Manage Quick Intersection data ################################################
 def check_catscan_data(app, themesAndCatsNames):
@@ -212,7 +212,7 @@ def save_updated_templates_status(app):
     print("\n- Save file with geo templates' statuses")
     fileName = app.TEMPLATESSTATUSFILE
     oldFileName = os.path.join(app.MISSINGTEMPLATESDIR, "old_%s" % app.TEMPLATESSTATUSFILE.split("/")[-1])
-    call("cp '%s' '%s'" % (fileName, oldFileName), shell=True)
+    copyfile(fileName, oldFileName)
     fileOut = open(fileName, "w")
     writer = csv.writer(fileOut, delimiter='\t')
     withTemplate = 0

@@ -289,16 +289,13 @@ class OSMcentroids(object):
             print(error)
 
     def drop_database(self):
-        proc = Popen(["rm", self.wOSMdb], stderr=PIPE)
-        status = proc.wait()
+        os.remove(self.wOSMdb)
 
-        if status == 0:
+        try:
             print("Rimosso il database {}".format(self.wOSMdb))
-        else:
-            output = proc.stderr.read()
-            print("rm exited with status: {}".format(status))
-            print(output)
-
+        except OSError as error:
+            print(error)
+            print("File path can not be removed")
 
 def main():
         # Options

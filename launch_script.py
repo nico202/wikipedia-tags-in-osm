@@ -38,6 +38,7 @@ import sys
 import json
 import webbrowser
 from babel.support import Translations
+from shutil import copyfile, copytree
 
 #local imports
 from osm_parser import ParseOSMData
@@ -377,7 +378,7 @@ The number of tagged articles will replace that of the lust run in the tags' num
         #Read configuration from config files
         configFile = "config.cfg"
         if not os.path.isfile(configFile):
-            call("cp %s %s" % ("config.template", configFile), shell=True)
+            copyfile("config.template", configFile)
             print("* A new config file has been created:\n  %s\n\n  Fill it with the necessary information (see README.md and config.template)." % configFile)
             answer = input("\n  Continue? [Y/n]\n")
             if answer not in ("", "Y", "y"):
@@ -650,7 +651,7 @@ the tag here and it will not be detected as error anymore.")
                     call('wget -c %s -O %s.osm.pbf' % (url, country), shell=True)
                     print("\n converting to O5M...")
                     call('osmconvert %s.osm.pbf -o=%s.o5m' % (country, country), shell=True)
-                    call('rm %s.osm.pbf' % (country), shell=True)
+                    os.remove('%s.osm.pbf' % (country))
                     #count tags "wikipedia=*"
                     tagsInCountry = self.count_wkp_tags_in_file(country)
                     tagsNum[country] = tagsInCountry
@@ -665,7 +666,7 @@ the tag here and it will not be detected as error anymore.")
         statsFile = os.path.join(statsDir, "stats.csv")
         oldStatsFile = os.path.join(statsDir, "old_stats.csv")
         if os.path.isfile(oldStatsFile):
-            call('mv %s %s' % (statsFile, oldStatsFile), shell=True)
+            os.rename(statsFile, oldStatsFile)
         ofile = open(statsFile, "w")
         writer = csv.writer(ofile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_ALL)
         #headers
@@ -687,8 +688,7 @@ the tag here and it will not be detected as error anymore.")
         if self.OUTDIR == "":
             print("\n  *Write in `config.cfg` --> `outdir` teh path of the directory in which you want to copy the files.")
         else:
-            # FIXME: can be done in pure python?
-            call("cp -R ./html/* %s" % self.OUTDIR, shell=True)
+            copytree("./html/", self.OUTDIR)
 
 
 def main():

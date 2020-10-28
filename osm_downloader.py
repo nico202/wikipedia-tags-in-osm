@@ -31,7 +31,7 @@ def download_osm_data(app):
     """
     print("\n- Download data of the country from Geofabrik ...")
     if os.path.isfile(app.countryPBF):
-        call('mv %s %s' % (app.countryPBF, app.oldCountryPBF), shell=True)
+        os.rename(app.countryPBF, app.oldCountryPBF)
     url = "http://download.geofabrik.de/europe/%s-latest.osm.pbf" % app.country
     call("wget -c '%s' -O %s" % (url, app.countryPBF), shell=True)
     convert_pbf_to_o5m(app)
@@ -45,7 +45,7 @@ def convert_pbf_to_o5m(app):
         sys.exit(1)
     print("\n- Convert file format: PBF --> O5M ...")
     if os.path.isfile(app.countryO5M):
-        call('mv %s %s' % (app.countryO5M, app.oldCountryO5M), shell=True)
+        os.rename(app.countryO5M, app.oldCountryO5M)
     command = 'osmconvert %s -B=%s --out-o5m -o=%s' % (app.countryPBF, app.countryPoly, app.countryO5M)
     call(command, shell=True)
     print("... done")
@@ -56,18 +56,18 @@ def update_osm_data(app):
     """
     print("\n- Update OSM data of %s with osmupdate ..." % app.country)
     if os.path.isfile(app.countryO5M):
-        call('mv %s %s' % (app.countryO5M, app.oldCountryO5M), shell=True)
+        os.rename(app.countryO5M, app.oldCountryO5M)
     else:
         print("O5M is missing, I'll try to convert the PBF file...")
         convert_pbf_to_o5m(app)
     call('osmupdate -v -B=%s %s %s' % (app.countryPoly, app.oldCountryO5M, app.countryO5M), shell=True)
     if os.path.isfile(app.countryO5M):
         print("\n- %s has been updated, removing temporary file %s" % (app.countryO5M, app.oldCountryO5M))
-        call("rm %s" % app.oldCountryO5M, shell=True)
+        os.remove(app.oldCountryO5M)
         return True
     else:
         print("\n it was already updates, ==> restoring the previoius file %s" % app.country)
-        call('mv %s %s' % (app.oldCountryO5M, app.countryO5M), shell=True)
+        os.rename(app.oldCountryO5M, app.countryO5M)
         return False
 
 
