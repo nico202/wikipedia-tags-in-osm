@@ -639,10 +639,15 @@ the tag here and it will not be detected as error anymore.")
         self.require_program('osmfilter')
 
         print("\n number of wikipedia tags")
+        # FIXME: Why italy is hardcoded?
         if country == "italy":
             path = self.OSMDIR
         else:
-            path = "/tmp/"
+            path = os.getenv('TMPDIR')
+            if path == None:
+                # Fallback, but prefer TMDIR variable
+                path = "/tmp/"
+
         call('osmfilter %s%s.o5m --out-count | grep wikipedia > data/stats/%s' % (path, country, country), shell=True)
         file_in = open("data/%s" % country, "r")
         lines = file_in.readlines()
