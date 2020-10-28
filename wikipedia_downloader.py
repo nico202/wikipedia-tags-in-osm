@@ -42,7 +42,7 @@ def check_catscan_data(app, themesAndCatsNames):
     """
     print("\n- Check that we have Wikipedia data (from Quick Intersection) of all the categories in `config.cfg`")
     needInfo = {}
-    for themeName, categoriesNames in themesAndCatsNames.iteritems():
+    for themeName, categoriesNames in themesAndCatsNames.items():
         for categoryName in categoriesNames:
             categoryCatscanFile = os.path.join(app.CATSCANDIR,
                                                themeName,
@@ -54,7 +54,7 @@ def check_catscan_data(app, themesAndCatsNames):
                 needInfo[themeName].append(categoryName)
 
     #download data of missing categories from Quick Intersection
-    for themeName, categoriesNames in needInfo.iteritems():
+    for themeName, categoriesNames in needInfo.items():
         for categoryName in categoriesNames:
             result = download_a_new_category(app, themeName, categoryName)
             if not result:
@@ -194,7 +194,7 @@ def parse_wikipedia_answer(app):
     data = json.load(inFile)
     inFile.close()
     pages = data["query"]["pages"]
-    for pageid, pageData in pages.iteritems():
+    for pageid, pageData in pages.items():
         title = pageData["title"].replace(" ", "_")
         if title in app.templatesStatus and app.templatesStatus[title] == "True":
             continue
@@ -249,7 +249,7 @@ def add_wikipedia_coordinates(app):
 
     #coords from Wikipedia = {article title : [lat, lon],...}
     app.titles_coords_from_wikipedia = {}
-    for title, (lat, lon) in coords_downloader.titles_coords.iteritems():
+    for title, (lat, lon) in coords_downloader.titles_coords.items():
         if (lat, lon) != ("", ""):
             app.titles_coords_from_wikipedia[title] = [float(lat), float(lon)]
     app.titlesWithCoordsFromWikipedia = {}

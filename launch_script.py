@@ -352,7 +352,7 @@ The number of tagged articles will replace that of the lust run in the tags' num
               "Wikipedia (map markers)")
         tree = {"type": "FeatureCollection", "features": []}
         i = 0
-        for title, coords in self.titlesWithCoordsFromWikipedia.iteritems():
+        for title, coords in self.titlesWithCoordsFromWikipedia.items():
             if title in self.titlesNotInOSM:
                 i += 1
                 lat, lon = coords
@@ -548,7 +548,7 @@ the tag here and it will not be detected as error anymore.")
         nonMappable = {"subcategories": subcategories,
                        "articles": articles,
                        "redirects": redirects}
-        for itemsType, itemsList in nonMappable.iteritems():
+        for itemsType, itemsList in nonMappable.items():
             fileName = open(os.path.join(self.NONMAPPABLE, itemsType), "r")
             nonMappableItems = fileName.read().replace(" ", "_").splitlines()
             fileName.close()

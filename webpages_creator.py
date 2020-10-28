@@ -117,7 +117,7 @@ class Helpers:
             link = self.url_to_link(url, "%s" % self.app._("Go to OSM web page of this object"), osmId[1:])
             links[osmTypeAbbr[osmId[0]] + "s"].append(link)
         osmIdsString = ""
-        for osmType, linksList in links.iteritems():
+        for osmType, linksList in links.items():
             if len(linksList) > 0:
                 if osmIdsString != "":
                     osmIdsString += "<br />"
@@ -431,7 +431,7 @@ class Creator():
         """Save webpages as html files
         """
         # homepage
-        for fileName, homepage in self.homepages.iteritems():
+        for fileName, homepage in self.homepages.items():
             self.save_file(homepage, fileName)
         # categories pages
         for theme in self.app.themes:

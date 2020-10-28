@@ -180,7 +180,7 @@ class CoordsDownloader:
         """Save the updated list of articles with coordinates."""
         with open(self.coords_file, "w") as f:
             for i, (title, coordinates) in enumerate(
-                    self.titles_coords.iteritems()):
+                    self.titles_coords.items()):
                 if len(coordinates) == 2:
                     lat, lon = coordinates
                 else:

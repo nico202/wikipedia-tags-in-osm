@@ -126,11 +126,11 @@ to `data/OSM/tags.csv`.")
            the names of mappers and the number of tags added by each one
         """
         print("\n  New tags || Mappers")
-        for tag, usersList in newTags.iteritems():
+        for tag, usersList in newTags.items():
             print(tag.encode("utf-8"), "||", [u.encode("utf-8") for u in usersList])
         print(len(newTags))
         print("\n  Mappers || Tags numbers")
-        for user, tagsNum in users.iteritems():
+        for user, tagsNum in users.items():
             print(user.encode("utf-8"), "||", tagsNum)
         print(len(users))
 
@@ -139,7 +139,7 @@ to `data/OSM/tags.csv`.")
         """
         tagsPerUser = self.read_old_tags_per_user(app.todayDate)
         #old users
-        for user, userData in tagsPerUser.iteritems():
+        for user, userData in tagsPerUser.items():
             if userData["today date"] != app.todayDate:
                 userData["tot"] += userData["today"]
             if user in todayTagsPerUser:
@@ -148,7 +148,7 @@ to `data/OSM/tags.csv`.")
                 userData["today"] = 0
             userData["today date"] = app.todayDate
         #new users
-        for user, todayTagsNum in todayTagsPerUser.iteritems():
+        for user, todayTagsNum in todayTagsPerUser.items():
             if user not in tagsPerUser:
                 tagsPerUser[user] = {"tot": 0,
                                      "today": todayTagsNum,
@@ -157,7 +157,7 @@ to `data/OSM/tags.csv`.")
         usersFileName = os.path.join("data", "OSM", "users.csv")
         outFile = open(usersFileName, 'wb')
         writer = csv.writer(outFile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_ALL)
-        for user, userData in tagsPerUser.iteritems():
+        for user, userData in tagsPerUser.items():
             writer.writerow([user.encode("utf-8"),
                              userData["tot"],
                              userData["today"],

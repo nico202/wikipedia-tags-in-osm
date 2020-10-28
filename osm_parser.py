@@ -56,7 +56,7 @@ class ParseOSMData():
         self.foreignTitles = {}  # articles tagged in foreign language
         dicts = self.extract_titles_from_tags()
         n = 0
-        for lang, titles in self.foreignTitles.iteritems():
+        for lang, titles in self.foreignTitles.items():
             n += len(titles)
         print("  %d tags referring to foreign languages have been found." % n)
 
@@ -72,8 +72,8 @@ class ParseOSMData():
             #get from Wikipedia API titles translations
             self.translate_titles()
         #Add foreign, translated titles
-        for lang, foreignTitles in self.foreignTitles.iteritems():
-            for foreignTitle, osmids in foreignTitles.iteritems():
+        for lang, foreignTitles in self.foreignTitles.items():
+            for foreignTitle, osmids in foreignTitles.items():
                 if lang in self.converted and foreignTitle in self.converted[lang]:
                     title = self.converted[lang][foreignTitle]
                     #print("added translated article", foreignTitle, title)
@@ -87,7 +87,7 @@ class ParseOSMData():
            that should not be considered as errors
         """
         tags = []
-        ifile = open(os.path.join("data", "workaround", "false_positive_tags.csv"), "rb")
+        ifile = open(os.path.join("data", "workaround", "false_positive_tags.csv"), "r")
         reader = csv.reader(ifile, delimiter='\t')
         for row in reader:
             if row != [] and row[0][0] != "#":
@@ -97,13 +97,13 @@ class ParseOSMData():
         return tags
 
     def save_centroids(self, centroids, osmType):
-        for osmIdNoType, coords in centroids.iteritems():
+        for osmIdNoType, coords in centroids.items():
             osmId = osmType + str(osmIdNoType)
             if osmId in self.app.osmObjs:
                 self.app.osmObjs[osmId]["coords"] = coords
 
     def save_dimensions(self, dimensions, osmType):
-        for osmIdNoType, dim in dimensions.iteritems():
+        for osmIdNoType, dim in dimensions.items():
             osmId = osmType + str(osmIdNoType)
             if osmId in self.app.osmObjs:
                 self.app.osmObjs[osmId]["dim"] = dim
@@ -227,7 +227,7 @@ class ParseOSMData():
                  "langMissing"     : {}     # wikipedia = title (lang missing)
                  }
 
-        for tag, tagData in self.tagsData.iteritems():
+        for tag, tagData in self.tagsData.items():
             osmIds = tagData["osmIds"]
             #for (key, value) in tags:
             (key, value) = tag
@@ -367,7 +367,7 @@ class ParseOSMData():
         """
         dictA, dictB = dictionariesList[:2]
         dictC = dictA
-        for title, osmIds in dictB.iteritems():
+        for title, osmIds in dictB.items():
             if not title in dictC:
                 dictC[title] = []
             for osmId in osmIds:
@@ -384,8 +384,8 @@ class ParseOSMData():
         """
         #Group the titles by language, {lang : [title, title, ...], ...}
         titlesPerLang = {}
-        for language, foreignTitles in self.foreignTitles.iteritems():
-            for foreignTitle, osmIds in foreignTitles.iteritems():
+        for language, foreignTitles in self.foreignTitles.items():
+            for foreignTitle, osmIds in foreignTitles.items():
                 if foreignTitle.find("#") == -1:
                     #Skipp wikipedia*=*article#section
                     #it is not possible to find a section of a page in a
@@ -405,7 +405,7 @@ class ParseOSMData():
         #                                ...],
         #                        lang : [], ...}
         stringsPerLang = {}
-        for language, titles in titlesPerLang.iteritems():
+        for language, titles in titlesPerLang.items():
             if language not in stringsPerLang:
                 stringsPerLang[language] = []
             for fiftyTitles in [sorted(titles[i:i + 50]) for i in range(0, len(titles), 50)]:
@@ -418,7 +418,7 @@ class ParseOSMData():
 
         #stringsPerLang = {"hr" : stringsPerLang["hr"]}      #debugging
 
-        for language, fiftyStringsList in stringsPerLang.iteritems():
+        for language, fiftyStringsList in stringsPerLang.items():
             print("\n- Get translations for %s titles:" % language)
             for fiftyStrings in fiftyStringsList:
                 answer = self.download_converted_titles(language, fiftyStrings)
@@ -502,7 +502,7 @@ class ParseOSMData():
     def add_to_converted(self, language, newconverted):
         if language not in self.converted:
             self.converted[language] = {}
-        for foreignTitle, prefTitle in newconverted.iteritems():
+        for foreignTitle, prefTitle in newconverted.items():
             self.converted[language][foreignTitle] = prefTitle
         #print("\n- titles converted to preferred language: %s, (%d)" % (language, len(newconverted)))
 
@@ -528,10 +528,10 @@ class ParseOSMData():
         return converted
 
     def print_translations(self, c):
-        for lang, translations in c.iteritems():
+        for lang, translations in c.items():
             print
             print("language:", lang)
-            for foreign, preferred in translations.iteritems():
+            for foreign, preferred in translations.items():
                 print("%s --> %s" % (foreign, preferred))
 
     def save_updated_conversions(self):
@@ -542,8 +542,8 @@ class ParseOSMData():
         fileOut = open(fileName, "w")
         writer = csv.writer(fileOut, delimiter='\t', quotechar='"', quoting=csv.QUOTE_ALL)
         n = 0
-        for language, data in self.converted.iteritems():
-            for foreignTitle, preferredTitle in data.iteritems():
+        for language, data in self.converted.items():
+            for foreignTitle, preferredTitle in data.items():
                 row = [language, foreignTitle.encode("utf-8"), preferredTitle.encode("utf-8")]
                 writer.writerow(row)
                 n += 1
