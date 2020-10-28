@@ -534,7 +534,8 @@ class ParseOSMData():
         print("\n- Saving file with Wikipedia articles' titles translations")
         fileName = os.path.join(self.app.WIKIPEDIAANSWERS, "conversions.csv")
         oldFileName = os.path.join(self.app.WIKIPEDIAANSWERS, "old_conversions.csv")
-        copyfile(fileName, oldFileName)
+        if os.path.exists(fileName):
+            os.rename(fileName, oldFileName)
         fileOut = open(fileName, "w")
         writer = csv.writer(fileOut, delimiter='\t', quotechar='"', quoting=csv.QUOTE_ALL)
         n = 0
