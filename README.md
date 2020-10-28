@@ -3,7 +3,7 @@ Wikipedia tags in OSM
 This program creates simple web pages with lists of Wikipedia articles, showing which ones are still to be tagged in OpenStreetMap (OSM).<br>
 Its aim is to invite OSM mappers to add Wikipedia tags, by showing the progress of Wikipedia articles tagging in a specific country, regarding a selected list of *mappable* categories.
 
-##Features:
+## Features:
 * Download and parse OSM and Wikipedia data to show the tagging **progress** of selected Wikipedia categories, in the configured country
 * Informations reagarding articles and their corresponding objects in OSM are provided through **links** to: [WIWOSM](https://wiki.openstreetmap.org/wiki/WIWOSM) map, OSM web pages, JOSM remote control and [Overpass Turbo](http://overpass-turbo.eu/). OSM objects belonging to the same category can be loaded on a map (downloaded, saved as image, etc...), through another Overpass Turbo link.
 * Tools that help to **add tags**:
@@ -14,7 +14,7 @@ Its aim is to invite OSM mappers to add Wikipedia tags, by showing the progress 
 
 Updated webpages for Italy can be found [here](http://geodati.fmach.it/gfoss_geodata/osm/wtosm/index.html) (thanks to [fmach.it](http://fmach.it) for hosting).
 
-##Overview
+## Overview
 Starting from a list of Wikipedia categories, written by the user in the 'config.cfg' file, the script:
 
 0. downloads/updates the OSM data (PBF) of a country (from GEOFABRIK)
@@ -22,11 +22,11 @@ Starting from a list of Wikipedia categories, written by the user in the 'config
 2. parses the OSM file, filtering the [tags](http://wiki.openstreetmap.org/wiki/Wikipedia) accepted by [WIWOSM](https://wiki.openstreetmap.org/wiki/WIWOSM) project
 3. creates webpages to show which articles are already tagged and which ones are not, providing links to inspect how the objects have been mapped.
 
-##Requirements
-###Data
+## Requirements
+### Data
 A POLY file with the same name of the country, e.g. `italy.poly`, must be put in `data/OSM` directory. It can be downloaded from [GEOFABRIK](http://download.geofabrik.de/).
 
-###Programs
+### Programs
 * python-lxml
 * osmupdate
 * osmconvert
@@ -42,9 +42,9 @@ Download osmconvert/update/filter from the [web site](http://wiki.openstreetmap.
         sudo apt-get install osmctools
 
 
-##Usage
+## Usage
 
-###Fill the config file
+### Fill the config file
 Create a copy of `config.template`, rename it as `config.cfg` and fill the following options:
 
 * `osmdir`, the directory where you want to download national OSM data
@@ -53,7 +53,7 @@ Create a copy of `config.template`, rename it as `config.cfg` and fill the follo
 * `country`, the country name as used in GEOFABRIK repository, for example: 'italy'
 * add one or more theme in `themes` section and add one or more Wikipedia categories to them. The script will then download subcategories and articles names from [Quick Intersection](http://tools.wmflabs.org/catscan2/quick_intersection.php). To refresh a category, just delete its file from `.data/wikipedia/catscan/themename`.
 
-###Run the script
+### Run the script
 0. (Optional) Print categories in the project:
 
         launch_script.py --print_categories_list
@@ -69,7 +69,7 @@ next time, just update the previously downloaded OSM data to the last minute (th
 
         launch_script.py --create_webpages
 
-####Other options
+#### Other options
 
 * Show JOSM link for zooming to the position of a non already tagged article, known by Wikipedia:
 
@@ -89,8 +89,8 @@ next time, just update the previously downloaded OSM data to the last minute (th
 
 For the complete list of options run `launch_script.py -h`.
 
-##Notes
-###Translations
+## Notes
+### Translations
 1. Create a translation catalog (PO file) for your language, e.g. DE:
 
         pybabel init -l de_DE -d ./locale -i ./locale/messages.pot
@@ -103,34 +103,34 @@ For the complete list of options run `launch_script.py -h`.
 
 Submit your translation as a pull request.
 
-###Non mappable categories or articles
+### Non mappable categories or articles
 Add the names of *non mappable* categories or articles (for example "Paintings in the X Museum") to the files `./data/wikipedia/non_mappable/subcategories` and `./data/wikipedia/non_mappable/articles`. The script will set them as invisible in the web pages.
 
 If you need to add many names to 'non_mappable' file, set the option 'clickable_cells = true' in config file and create web pages again.<br>Now, by clicking on tables cells, a string of names will be automatically created on top of the page, ready to be copied and pasted to 'non_mappable' files.
 
 Redirects aren't supported by WIWOSM, therefore they are not downloaded when Wikipedia categories data is requested to Quick Intersection. However, you can manually add a new redirect to `./data/wikipedia/non_mappable/redirects` so that it will be removed without having to download Wikipedia category data again.
 
-###Infer coordinates with Nuts4Nuts
+### Infer coordinates with Nuts4Nuts
 The first time the script is run with the option -n it infers the coordinates of Wikipedia articles without a geographic position. The coordinates are saved to the file 'data/nuts4nuts/nuts4nuts_LANG_coords.txt'. Since this can take a long time it is better to create the file on its own, by running 'python nuts4nuts_infer.py'. This script can be interrupted to scan more articles a little at a time.
 
-###Workarounds
-####Tagged articles not detected by the script
+### Workarounds
+#### Tagged articles not detected by the script
 If the the script does not correctly detect a tag in the OSM file, add the article name and OSM objects ids to `./data/workaround/tagged.csv` (and fix the parser ;-)
 
-####False positive errors
+#### False positive errors
 If the the script flag as error a tag which is considered correct (strange tags), add the tag to the file `./data/workaround/false_positive.csv` and the tag will not be flagged as error again.
 
-###Debugging
+### Debugging
 For debugging purpose, categories trees can be print to text files, by setting `print categories to text files = true` option in the config file.
 
-##Development
+## Development
 Authors: [Simone F.](http://wiki.openstreetmap.org/wiki/User:Groppo/) <groppo8@gmail.com> (main author), Luca Delucchi, Cristian Consonni
 
 Contributors: dforsi, aborruso, Alessandro Palmas
 
 Code: Python, license GPLv3
 
-###Credits and attributions
+### Credits and attributions
 This program has been inspired by JOSM's [Wikipedia Plugin](http://wiki.openstreetmap.org) and [add-tags](http://wiki.openstreetmap.org/wiki/JOSM/Plugins/RemoteControl/Add-tags) (Kolossos).
 
 Services linked from the pages: [WIWOSM](http://wiki.openstreetmap.org/wiki/WIWOSM) (master, Kolossos), [add-tags](http://wiki.openstreetmap.org/wiki/JOSM/Plugins/RemoteControl/Add-tags) (Kolossos), [OverpassTurbo](http://overpass-turbo.eu/) (tyr.asd)
