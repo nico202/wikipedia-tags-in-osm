@@ -27,6 +27,7 @@
 """
 
 import argparse
+from argparse import RawTextHelpFormatter
 import os
 import time
 import locale
@@ -59,7 +60,8 @@ class App:
 - creates webpages for showing which articles are already tagged and
  which ones are not.
 """
-        parser = argparse.ArgumentParser(description=text)
+        parser = argparse.ArgumentParser(description=text,
+                                         formatter_class=RawTextHelpFormatter)
         group = parser.add_mutually_exclusive_group()
         #Manage OSM data
         parser.add_argument("-d", "--download_osm",
