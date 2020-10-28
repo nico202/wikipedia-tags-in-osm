@@ -32,7 +32,7 @@ import time
 import locale
 from subprocess import call
 import csv
-import ConfigParser
+import configparser as ConfigParser
 import sys
 import json
 import webbrowser

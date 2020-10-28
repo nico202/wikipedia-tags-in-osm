@@ -29,7 +29,7 @@ import urllib2
 import csv
 import json
 from subprocess import call
-import ConfigParser
+import configparser
 import time
 from wikipedia_coords_downloader import CoordsDownloader
 
