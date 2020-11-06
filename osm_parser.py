@@ -463,7 +463,7 @@ class ParseOSMData():
                     return False
                 else:
                     #print("\nOK, Saving answer")
-                    file_out = open(self.app.WIKIPEDIAANSWER, "w")
+                    file_out = open(self.app.WIKIPEDIAANSWER, "wb")
                     file_out.write(wikipediaAnswer.read())
                     file_out.close()
                     return True
