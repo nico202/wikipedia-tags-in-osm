@@ -24,7 +24,8 @@
 
 import argparse
 import os
-from pysqlite2 import dbapi2 as spatialite
+# FIXME: don't know what to do!
+# from pysqlite3 import dbapi2
 from subprocess import Popen, PIPE, call
 
 
