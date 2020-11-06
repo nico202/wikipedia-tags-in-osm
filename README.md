@@ -39,8 +39,9 @@ A POLY file with the same name of the country, e.g. `italy.poly`, must be put in
 
 Download osmconvert/update/filter from the [web site](http://wiki.openstreetmap.org/wiki/Osmconvert) or install with:
         
-        sudo apt-get install osmctools
-
+```bash
+sudo apt-get install osmctools
+```
 
 ## Usage
 
@@ -56,36 +57,53 @@ Create a copy of `config.template`, rename it as `config.cfg` and fill the follo
 ### Run the script
 0. (Optional) Print categories in the project:
 
-        launch_script.py --print_categories_list
+```bash
+launch_script.py --print_categories_list
+```
 
 1. Download OpenStreetMap data of the country:
 
-        launch_script.py --download_osm
+```bash
+launch_script.py --download_osm
+```
+
 next time, just update the previously downloaded OSM data to the last minute (through osmupdate):
 
-        launch_script.py --update_osm
+```bash
+launch_script.py --update_osm
+```
 
 2. Read Wikipedia data (categories -> subcategories -> articles), search tagged articles in the OSM file and create updated webpages:
 
-        launch_script.py --create_webpages
+```bash
+launch_script.py --create_webpages
+```
 
 #### Other options
 
 * Show JOSM link for zooming to the position of a non already tagged article, known by Wikipedia:
 
-         launch_script.py --show_link_to_wikipedia_coordinates --create_webpages
+```bash
+launch_script.py --show_link_to_wikipedia_coordinates --create_webpages
+```
 
 * Show JOSM link for zooming to the position of a non already tagged article, whose coordinates have been infered with [Nuts4Nuts](https://github.com/SpazioDati/Nuts4Nuts) (see below for more info)
 
-         launch_script.py --infer_coordinates_from_wikipedia --create_webpages
+```bash
+launch_script.py --infer_coordinates_from_wikipedia --create_webpages
+```
 
 * Mark on the webpages the articles without Coord template on Wikipedia:
 
-         launch_script.py --show_missing_templates --create_webpages
+```bash
+launch_script.py --show_missing_templates --create_webpages
+```
 
 * Calculate OSM coordinates of articles (point for nodes, centroids for ways and relations) and suggest to use them when a Wikipedia article is missing Coord template:
 
-         launch_script.py -t --show_coordinates_from_osm --create_webpages
+```bash
+launch_script.py -t --show_coordinates_from_osm --create_webpages
+```
 
 For the complete list of options run `launch_script.py -h`.
 
@@ -93,13 +111,17 @@ For the complete list of options run `launch_script.py -h`.
 ### Translations
 1. Create a translation catalog (PO file) for your language, e.g. DE:
 
-        pybabel init -l de_DE -d ./locale -i ./locale/messages.pot
+```bash
+pybabel init -l de_DE -d ./locale -i ./locale/messages.pot
+```
 
 2. translate the strings in catalog, e.g. `locale/de_DE/LC_MESSAGES/de_DE.po`
 
 3. compile catalog to binary MO file:
 
-        pybabel compile -f -d ./locale
+```bash
+pybabel compile -f -d ./locale
+```
 
 Submit your translation as a pull request.
 
